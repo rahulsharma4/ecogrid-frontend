@@ -58,6 +58,8 @@ const ContactsPage = () => {
   const [selectedContactIds, setSelectedContactIds] = useState([]);
   const [telecallers, setTelecallers] = useState([]);
   const [selectedTelecallerId, setSelectedTelecallerId] = useState('');
+  const [assignmentMode, setAssignmentMode] = useState('manual');
+  const [autoAssignCount, setAutoAssignCount] = useState('10');
   
   // Telecaller Action State
   const [showStatusModal, setShowStatusModal] = useState(false);
@@ -310,10 +312,30 @@ const ContactsPage = () => {
     });
   };
 
+  const openAssignModal = () => {
+    if (selectedContactIds.length > 0) {
+      setAssignmentMode('manual');
+    } else {
+      setAssignmentMode('auto');
+    }
+    setAutoAssignCount('10');
+    setSelectedTelecallerId('');
+    setShowAssignModal(true);
+  };
+
   // Bulk Assign Contacts (Admin)
   const handleAssignSubmit = async (e) => {
     e.preventDefault();
-    if (selectedContactIds.length === 0) return;
+
+    const targetContactIds = assignmentMode === 'manual'
+      ? selectedContactIds
+      : filteredContacts.filter(c => !c.assignedTo).slice(0, parseInt(autoAssignCount, 10) || 0).map(c => c._id);
+
+    if (targetContactIds.length === 0) {
+      toast.error(assignmentMode === 'manual' ? 'No contacts selected' : 'No unassigned contacts available to assign');
+      return;
+    }
+
     setIsSubmitting(true);
     const loadingToast = toast.loading('Assigning contacts...');
 
@@ -322,7 +344,7 @@ const ContactsPage = () => {
       await axios.patch(
         `${import.meta.env.VITE_API_BASE_URL}/contacts/assign`,
         {
-          contactIds: selectedContactIds,
+          contactIds: targetContactIds,
           assignedTo: selectedTelecallerId === 'unassign' ? null : (selectedTelecallerId || null)
         },
         config
@@ -538,6 +560,13 @@ const ContactsPage = () => {
               Bulk Import (Excel/CSV)
             </button>
             <button 
+              onClick={openAssignModal} 
+              className="btn-secondary flex items-center gap-2 self-start md:self-center"
+            >
+              <UserCheck className="w-4 h-4" />
+              Assign to Telecaller
+            </button>
+            <button 
               onClick={() => setShowAddModal(true)} 
               className="btn-primary flex items-center gap-2 self-start md:self-center shadow-lg shadow-[#3f7abe]/10"
             >
@@ -735,7 +764,7 @@ const ContactsPage = () => {
                 Clear
               </button>
               <button
-                onClick={() => setShowAssignModal(true)}
+                onClick={openAssignModal}
                 className="btn-primary px-5 py-2.5 flex items-center gap-2 rounded-2xl text-[10px] uppercase tracking-widest shadow-lg shadow-[#3f7abe]/20"
               >
                 <UserCheck className="w-4 h-4" />
@@ -754,7 +783,9 @@ const ContactsPage = () => {
               <div>
                 <h2 className="text-2xl font-black text-[#3f7abe]">Assign Tasks</h2>
                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">
-                  Assigning {selectedContactIds.length} contacts
+                  {assignmentMode === 'manual'
+                    ? `Assigning ${selectedContactIds.length} contacts manually`
+                    : `Auto-assigning top contacts`}
                 </p>
               </div>
               <button 
@@ -779,13 +810,70 @@ const ContactsPage = () => {
                       { value: 'unassign', label: 'Unassigned (Clear assignment)' },
                       ...telecallers.map(t => ({
                         value: t._id,
-                        label: `${t.name} (${t.email})`
+                        label: `${t.name.toUpperCase()} (${t.email})`
                       }))
                     ]}
                     placeholder="-- Choose Telecaller --"
                     searchPlaceholder="Search telecallers..."
                   />
                 </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">
+                    Assignment Method
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => setAssignmentMode('manual')}
+                      disabled={selectedContactIds.length === 0}
+                      className={`py-2 text-[9px] font-black uppercase tracking-wider rounded-lg transition-all ${
+                        assignmentMode === 'manual'
+                          ? 'bg-white text-slate-900 shadow-sm'
+                          : 'text-slate-500 hover:text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                      }`}
+                    >
+                      Manual ({selectedContactIds.length} Selected)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAssignmentMode('auto')}
+                      className={`py-2 text-[9px] font-black uppercase tracking-wider rounded-lg transition-all ${
+                        assignmentMode === 'auto'
+                          ? 'bg-white text-slate-900 shadow-sm'
+                          : 'text-slate-500 hover:text-slate-700'
+                      }`}
+                    >
+                      Auto-Assign (Top List)
+                    </button>
+                  </div>
+                </div>
+
+                {assignmentMode === 'auto' && (
+                  <div className="space-y-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">
+                      Number of Contacts to Assign *
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="number"
+                        required
+                        min="1"
+                        max={filteredContacts.filter(c => !c.assignedTo).length}
+                        value={autoAssignCount}
+                        onChange={(e) => setAutoAssignCount(e.target.value)}
+                        placeholder="e.g. 10"
+                        className="input-field pr-20"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-black text-slate-400 uppercase tracking-wider">
+                        Max: {filteredContacts.filter(c => !c.assignedTo).length}
+                      </span>
+                    </div>
+                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wide ml-1">
+                      Assigns the first {autoAssignCount || 0} unassigned contacts matching current search/filters.
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-4 pt-2">
