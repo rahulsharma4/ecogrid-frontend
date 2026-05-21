@@ -818,36 +818,16 @@ const ContactsPage = () => {
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">
-                    Assignment Method
-                  </label>
-                  <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
-                    <button
-                      type="button"
-                      onClick={() => setAssignmentMode('manual')}
-                      disabled={selectedContactIds.length === 0}
-                      className={`py-2 text-[9px] font-black uppercase tracking-wider rounded-lg transition-all ${
-                        assignmentMode === 'manual'
-                          ? 'bg-white text-slate-900 shadow-sm'
-                          : 'text-slate-500 hover:text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed'
-                      }`}
-                    >
-                      Manual ({selectedContactIds.length} Selected)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAssignmentMode('auto')}
-                      className={`py-2 text-[9px] font-black uppercase tracking-wider rounded-lg transition-all ${
-                        assignmentMode === 'auto'
-                          ? 'bg-white text-slate-900 shadow-sm'
-                          : 'text-slate-500 hover:text-slate-700'
-                      }`}
-                    >
-                      Auto-Assign (Top List)
-                    </button>
+                {assignmentMode === 'manual' && (
+                  <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100/80 space-y-1">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
+                      Assignment Method
+                    </span>
+                    <span className="text-xs font-bold text-slate-700 block">
+                      Manual Assignment ({selectedContactIds.length} contact{selectedContactIds.length > 1 ? 's' : ''} selected)
+                    </span>
                   </div>
-                </div>
+                )}
 
                 {assignmentMode === 'auto' && (
                   <div className="space-y-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
