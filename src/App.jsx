@@ -18,6 +18,7 @@ import PaymentReceiptPage from './pages/PaymentReceiptPage';
 import FormalInvoicePage from './pages/FormalInvoicePage';
 import StaffDetailPage from './pages/StaffDetailPage';
 import ContactsPage from './pages/ContactsPage';
+import ContactDetailPage from './pages/ContactDetailPage';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -78,6 +79,7 @@ function App() {
                     <Route path="staff-management" element={<AdminRoute><StaffPage /></AdminRoute>} />
                     <Route path="staff/:id" element={<AdminRoute><StaffDetailPage /></AdminRoute>} />
                     <Route path="contacts" element={<ContactsPage />} />
+                    <Route path="contacts/:id" element={<ContactDetailPage />} />
                     <Route path="payments" element={<PaymentsPage />} />
                     <Route path="payments/receipt/:id" element={<PaymentReceiptPage />} />
                     <Route path="*" element={<Navigate to="stats" />} />

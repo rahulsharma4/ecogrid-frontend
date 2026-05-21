@@ -92,6 +92,8 @@ const StaffPage = () => {
       isOpen: true,
       title: 'Delete Staff Member?',
       message: 'This action will revoke all access for this personnel immediately. Are you sure you want to proceed?',
+      type: 'danger',
+      confirmText: 'Delete Member',
       onConfirm: async () => {
         const loadingToast = toast.loading('Removing personnel...');
         try {
@@ -102,6 +104,41 @@ const StaffPage = () => {
         } catch (err) {
           const msg = err.response?.data?.message || err.message;
           toast.error('Failed to delete staff: ' + msg, { id: loadingToast });
+        }
+      }
+    });
+  };
+
+  const toggleBlockStatus = async (id, currentStatus) => {
+    const isBlocking = currentStatus === 'active';
+    setModalConfig({
+      isOpen: true,
+      title: isBlocking ? 'Block Staff Member?' : 'Unblock Staff Member?',
+      message: isBlocking 
+        ? 'This user will be blocked immediately and logged out of any active sessions. Are you sure?'
+        : 'This user will be unblocked and will be able to log back into their account. Are you sure?',
+      type: isBlocking ? 'danger' : 'confirm',
+      confirmText: isBlocking ? 'Block Member' : 'Unblock Member',
+      onConfirm: async () => {
+        const actionText = isBlocking ? 'Blocking' : 'Unblocking';
+        const loadingToast = toast.loading(`${actionText} personnel...`);
+        try {
+          const config = { headers: { Authorization: `Bearer ${user.token}` } };
+          const { data } = await axios.patch(
+            `${import.meta.env.VITE_API_BASE_URL}/staff/${id}/toggle-status`,
+            {},
+            config
+          );
+          
+          toast.success(`Personnel successfully ${data.status === 'active' ? 'unblocked' : 'blocked'}!`, { id: loadingToast });
+          
+          // Update local state instead of full re-fetch for instant UI feedback
+          setStaff(prev => prev.map(member => 
+            member._id === id ? { ...member, status: data.status } : member
+          ));
+        } catch (err) {
+          const msg = err.response?.data?.message || err.message;
+          toast.error(`Failed to update status: ${msg}`, { id: loadingToast });
         }
       }
     });
@@ -213,7 +250,14 @@ const StaffPage = () => {
             
             <div className="mt-auto bg-slate-50/50 p-2.5 flex items-center justify-between border-t border-slate-50">
                <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest">ID: {member._id.slice(-6).toUpperCase()}</span>
-               <button className="text-[8px] font-black text-[#3f7abe] uppercase tracking-widest hover:underline">Config</button>
+               <button 
+                 onClick={(e) => { e.stopPropagation(); toggleBlockStatus(member._id, member.status); }}
+                 className={`text-[8px] font-black uppercase tracking-widest hover:underline transition-all ${
+                   member.status === 'active' ? 'text-red-500 hover:text-red-700' : 'text-emerald-500 hover:text-emerald-700'
+                 }`}
+               >
+                 {member.status === 'active' ? 'Block' : 'Unblock'}
+               </button>
             </div>
           </div>
         ))}
@@ -306,8 +350,8 @@ const StaffPage = () => {
         onConfirm={modalConfig.onConfirm}
         title={modalConfig.title}
         message={modalConfig.message}
-        type="danger"
-        confirmText="Delete Member"
+        type={modalConfig.type || 'danger'}
+        confirmText={modalConfig.confirmText || 'Confirm'}
       />
     </div>
   );

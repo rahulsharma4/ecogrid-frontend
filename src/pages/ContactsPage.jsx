@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import ConfirmationModal from '../components/UI/ConfirmationModal';
 import SearchableSelect from '../components/UI/SearchableSelect';
@@ -47,6 +48,7 @@ const statusColors = {
 const ContactsPage = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
+  const navigate = useNavigate();
   
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -672,7 +674,12 @@ const ContactsPage = () => {
                         {contact.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-slate-900 uppercase tracking-tight">{contact.name}</div>
+                        <div 
+                          onClick={() => navigate(`/dashboard/contacts/${contact._id}`)}
+                          className="text-xs font-bold text-slate-900 uppercase tracking-tight hover:text-[#3f7abe] hover:underline cursor-pointer"
+                        >
+                          {contact.name}
+                        </div>
                         <div className="flex items-center gap-1 text-[9px] text-slate-400 font-bold uppercase mt-0.5" title="Creation Details">
                           <Calendar className="w-2.5 h-2.5 shrink-0 text-slate-400" />
                           <span>{new Date(contact.createdAt).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}</span>
