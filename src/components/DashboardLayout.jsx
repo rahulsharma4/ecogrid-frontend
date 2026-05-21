@@ -188,7 +188,7 @@ const DashboardLayout = ({ children }) => {
       )}
 
       {/* Main Content */}
-      <main className={`flex-1 flex flex-col min-h-screen transition-all duration-300 
+      <main className={`flex-1 flex flex-col min-h-screen transition-all duration-300 min-w-0 
         ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}
       `}>
         {/* Header */}

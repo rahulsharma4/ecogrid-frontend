@@ -27,6 +27,7 @@ import {
   Download,
   Zap,
   Calendar,
+  Clock,
   Camera,
   Briefcase,
   Smartphone,
@@ -68,7 +69,9 @@ const ContactsPage = () => {
   
   const [statusForm, setStatusForm] = useState({
     status: '',
-    remarks: ''
+    remarks: '',
+    callBackDate: '',
+    callBackTime: ''
   });
 
   const [activeTab, setActiveTab] = useState('project'); // 'project' or 'personal'
@@ -367,21 +370,36 @@ const ContactsPage = () => {
   const handleStatusUpdateSubmit = async (e) => {
     e.preventDefault();
     if (!selectedContact) return;
+
+    if (statusForm.status === 'Call Back' && (!statusForm.callBackDate || !statusForm.callBackTime)) {
+      toast.error('Please select both callback date and time');
+      return;
+    }
+
     setIsSubmitting(true);
     const loadingToast = toast.loading('Updating status...');
 
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
+      const payload = {
+        status: statusForm.status,
+        remarks: statusForm.remarks,
+      };
+
+      if (statusForm.status === 'Call Back') {
+        payload.callBackDate = new Date(`${statusForm.callBackDate}T${statusForm.callBackTime}`);
+      }
+
       const { data } = await axios.patch(
         `${import.meta.env.VITE_API_BASE_URL}/contacts/${selectedContact._id}`,
-        statusForm,
+        payload,
         config
       );
 
       toast.success('Contact updated successfully!', { id: loadingToast });
       
       // Update local state
-      setContacts(prev => prev.map(c => c._id === selectedContact._id ? { ...c, status: data.status, remarks: data.remarks } : c));
+      setContacts(prev => prev.map(c => c._id === selectedContact._id ? { ...c, ...data } : c));
       setShowStatusModal(false);
       setSelectedContact(null);
     } catch (err) {
@@ -424,10 +442,22 @@ const ContactsPage = () => {
   // Open Status modal
   const openStatusModal = (contact) => {
     setSelectedContact(contact);
-    setStatusForm({
-      status: contact.status || 'New',
-      remarks: contact.remarks || ''
-    });
+    if (contact.status === 'Call Back' && contact.callBackDate) {
+      const d = new Date(contact.callBackDate);
+      setStatusForm({
+        status: contact.status || 'New',
+        remarks: contact.remarks || '',
+        callBackDate: d.toISOString().split('T')[0],
+        callBackTime: d.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit' })
+      });
+    } else {
+      setStatusForm({
+        status: contact.status || 'New',
+        remarks: contact.remarks || '',
+        callBackDate: '',
+        callBackTime: ''
+      });
+    }
     setShowStatusModal(true);
   };
 
@@ -602,7 +632,7 @@ const ContactsPage = () => {
             <thead>
               <tr className="bg-slate-50/75 border-b border-slate-100">
                 {isAdmin && (
-                  <th className="p-5 w-10 text-center">
+                  <th className="px-4 py-3 w-10 text-center">
                     <input 
                       type="checkbox" 
                       onChange={handleSelectAll} 
@@ -612,20 +642,20 @@ const ContactsPage = () => {
                     />
                   </th>
                 )}
-                <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Name</th>
-                <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Phone</th>
-                <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Address</th>
-                <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
-                <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Assigned To</th>
-                <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest">Remarks</th>
-                <th className="p-5 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Action</th>
+                <th className="px-4 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Name</th>
+                <th className="px-4 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Phone</th>
+                <th className="px-4 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Address</th>
+                <th className="px-4 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</th>
+                <th className="px-4 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Assigned To</th>
+                <th className="px-4 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Remarks</th>
+                <th className="px-4 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
               {filteredContacts.map((contact) => (
                 <tr key={contact._id} className="hover:bg-slate-50/50 transition-colors group">
                   {isAdmin && (
-                    <td className="p-5 text-center">
+                    <td className="px-4 py-3.5 text-center">
                       <input 
                         type="checkbox" 
                         checked={selectedContactIds.includes(contact._id)}
@@ -636,62 +666,86 @@ const ContactsPage = () => {
                       />
                     </td>
                   )}
-                  <td className="p-5">
+                  <td className="px-4 py-3.5">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center font-bold text-xs text-[#3f7abe]">
+                      <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center font-bold text-xs text-[#3f7abe] shrink-0 shadow-sm">
                         {contact.name.charAt(0).toUpperCase()}
                       </div>
-                      <span className="text-xs font-bold text-slate-900 uppercase tracking-tight">{contact.name}</span>
+                      <div>
+                        <div className="text-xs font-bold text-slate-900 uppercase tracking-tight">{contact.name}</div>
+                        <div className="flex items-center gap-1 text-[9px] text-slate-400 font-bold uppercase mt-0.5" title="Creation Details">
+                          <Calendar className="w-2.5 h-2.5 shrink-0 text-slate-400" />
+                          <span>{new Date(contact.createdAt).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}</span>
+                          {contact.createdBy?.name && (
+                            <span className="text-slate-500 font-black text-[8px] px-1.5 py-0.5 bg-slate-100 rounded ml-1 tracking-wider whitespace-nowrap">BY: {contact.createdBy.name.split(' ')[0].toUpperCase()}</span>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </td>
-                  <td className="p-5">
-                    <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold">
+                  <td className="px-4 py-3.5">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold whitespace-nowrap">
                       <Phone className="w-3.5 h-3.5 text-slate-400" />
                       {contact.phone}
                     </div>
                   </td>
-                  <td className="p-5">
-                    <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold max-w-[200px] truncate">
+                  <td className="px-4 py-3.5">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-600 font-semibold max-w-[140px] truncate" title={contact.address}>
                       <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       {contact.address}
                     </div>
                   </td>
-                  <td className="p-5">
-                    <span className={`px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider border ${statusColors[contact.status] || 'bg-slate-50 text-slate-600 border-slate-200'}`}>
+                  <td className="px-4 py-3.5">
+                    <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider border ${statusColors[contact.status] || 'bg-slate-50 text-slate-600 border-slate-200'} inline-block`}>
                       {contact.status}
                     </span>
+                    {contact.status === 'Call Back' && contact.callBackDate && (
+                      <div className="flex items-center gap-1 text-[9px] text-[#3f7abe] font-black uppercase mt-1" title="Scheduled Callback time">
+                        <Calendar className="w-2.5 h-2.5 shrink-0" />
+                        <span>Callback: {new Date(contact.callBackDate).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-1 text-[9px] text-slate-400 font-bold uppercase mt-1" title="Last status update time">
+                      <Clock className="w-2.5 h-2.5 shrink-0" />
+                      <span>{new Date(contact.updatedAt).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}</span>
+                      {contact.updatedBy?.name && (
+                        <span className="text-[#3f7abe] font-black text-[8px] px-1.5 py-0.5 bg-slate-50 border border-slate-100 rounded ml-1 tracking-wider whitespace-nowrap">BY: {contact.updatedBy.name.split(' ')[0].toUpperCase()}</span>
+                      )}
+                    </div>
                   </td>
-                  <td className="p-5">
+                  <td className="px-4 py-3.5">
                     {contact.assignedTo ? (
-                      <span className="px-2 py-1 bg-teal-50 text-teal-700 border border-teal-200 rounded-lg text-[9px] font-black uppercase tracking-wider">
-                        {contact.assignedTo.name}
-                      </span>
+                      <div className="flex items-center gap-1 text-slate-600 font-bold text-xs uppercase truncate max-w-[120px] tracking-tight" title={contact.assignedTo.name}>
+                        <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span>{contact.assignedTo.name.split(' ')[0]}</span>
+                      </div>
                     ) : (
-                      <span className="px-2 py-1 bg-slate-50 text-slate-400 border border-slate-200 rounded-lg text-[9px] font-black uppercase tracking-wider">
-                        Unassigned
-                      </span>
+                      <div className="flex items-center gap-1 text-slate-400 font-bold text-xs uppercase tracking-tight">
+                        <User className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                        <span>Unassigned</span>
+                      </div>
                     )}
                   </td>
-                  <td className="p-5">
-                    <span className="text-xs font-semibold text-slate-500 italic truncate max-w-[150px] block">
+                  <td className="px-4 py-3.5">
+                    <span className="text-xs font-semibold text-slate-500 italic truncate max-w-[120px] block" title={contact.remarks}>
                       {contact.remarks || 'No remarks'}
                     </span>
                   </td>
-                  <td className="p-5 text-right">
+                  <td className="px-4 py-3.5 text-right">
                     <div className="flex justify-end items-center gap-2">
                       <a
                         href={`tel:${contact.phone}`}
-                        className="px-2.5 py-1.5 bg-sky-50 hover:bg-sky-500 text-sky-700 hover:text-white border border-sky-100 hover:border-sky-300 rounded-xl transition-all font-black text-[9px] uppercase tracking-wider flex items-center gap-1.5 active:scale-95 shadow-sm"
+                        className="px-2 py-1 bg-sky-50 hover:bg-sky-500 text-sky-700 hover:text-white border border-sky-100 hover:border-sky-300 rounded-lg transition-all font-black text-[9px] uppercase tracking-wider flex items-center gap-1 active:scale-95 shadow-sm"
                         title={`Call ${contact.name}`}
                       >
-                        <Phone className="w-3 h-3" />
+                        <Phone className="w-2.5 h-2.5" />
                         Call
                       </a>
                       
                       {isAdmin ? (
                         <button
                           onClick={() => handleDeleteContact(contact._id)}
-                          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all active:scale-95"
+                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all active:scale-95"
                           title="Delete Contact"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -701,18 +755,18 @@ const ContactsPage = () => {
                           <>
                             <button
                               onClick={() => openStatusModal(contact)}
-                              className="px-2.5 py-1.5 bg-slate-50 hover:bg-[#3f7abe]/5 text-slate-600 hover:text-[#3f7abe] border border-slate-100 rounded-xl transition-all font-black text-[9px] uppercase tracking-wider flex items-center gap-1 active:scale-95"
+                              className="px-2 py-1 bg-slate-50 hover:bg-[#3f7abe]/5 text-slate-600 hover:text-[#3f7abe] border border-slate-100 rounded-lg transition-all font-black text-[9px] uppercase tracking-wider flex items-center gap-1 active:scale-95"
                               title="Update Status / Remarks"
                             >
-                              <Edit className="w-3 h-3" />
+                              <Edit className="w-2.5 h-2.5" />
                               Update
                             </button>
                             <button
                               onClick={() => openConvertModal(contact)}
-                              className="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-100 rounded-xl transition-all font-black text-[9px] uppercase tracking-wider flex items-center gap-1 active:scale-95"
+                              className="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-100 rounded-lg transition-all font-black text-[9px] uppercase tracking-wider flex items-center gap-1 active:scale-95"
                               title="Convert to Lead"
                             >
-                              <Sparkles className="w-3 h-3" />
+                              <Sparkles className="w-2.5 h-2.5" />
                               Convert
                             </button>
                           </>
@@ -1138,6 +1192,36 @@ const ContactsPage = () => {
                     <option value="Not Interested">Not Interested</option>
                   </select>
                 </div>
+
+                {statusForm.status === 'Call Back' && (
+                  <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">
+                        Callback Date *
+                      </label>
+                      <input
+                        type="date"
+                        required
+                        min={new Date().toISOString().split('T')[0]}
+                        value={statusForm.callBackDate}
+                        onChange={(e) => setStatusForm({ ...statusForm, callBackDate: e.target.value })}
+                        className="input-field"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">
+                        Callback Time *
+                      </label>
+                      <input
+                        type="time"
+                        required
+                        value={statusForm.callBackTime}
+                        onChange={(e) => setStatusForm({ ...statusForm, callBackTime: e.target.value })}
+                        className="input-field"
+                      />
+                    </div>
+                  </div>
+                )}
                 
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">
