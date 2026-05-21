@@ -659,7 +659,7 @@ const QuotationViewPage = () => {
                   {quotation.isGstInclusive ? (
                     <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
                       <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#374151' }}>
-                        Net Price (Inclusive of {quotation.gstPercentage}% GST)
+                        Net Price (Inclusive of {quotation.gstPercentage || 8.9}% GST)
                       </td>
                       <td style={{ padding: '6px 4px', textAlign: 'right', fontWeight: '900', color: '#111827' }}>
                         ₹ {netPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 })}

@@ -244,7 +244,7 @@ const FormalInvoicePage = () => {
                      </div>
                    </>
                  )}
-                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: showGst ? '15px' : '0', borderTop: showGst ? '2px solid #e2e8f0' : 'none', fontSize: '15px', fontWeight: '900', color: '#1e4465' }}>
+                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: showGst ? '15px' : '0', borderTop: showGst ? '2px solid #e2e8f0' : 'none', fontSize: '16px', fontWeight: '900', color: '#1e4465' }}>
                     <span>Grand Total {showGst && invoice.isGstInclusive && '(Inclusive of GST)'}</span>
                     <span>₹{netAmt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                  </div>

@@ -298,7 +298,7 @@ const QuotationsPage = () => {
                                   inverter: q.inverter,
                                   baseAmount: q.isGstInclusive ? q.netPrice : (q.netPrice - q.gstAmount),
                                   gstPercentage: q.gstPercentage,
-                                  isGstInclusive: q.isGstInclusive,
+                                  isGstInclusive: !!q.isGstInclusive,
                                   amountPaid: 0
                                 }, config);
                                 toast.success('Invoice Generated!', { id: loadingToast });

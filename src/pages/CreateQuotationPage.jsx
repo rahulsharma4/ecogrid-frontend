@@ -117,18 +117,14 @@ const CreateQuotationPage = () => {
     
     let gst = 0;
     let net = 0;
-    const gstPerc = Number(formData.gstPercentage) || 0;
-
-    if (formData.includeGST) {
-      // Exclusive
-      gst = (amountAfterDisc * gstPerc) / 100;
-      net = amountAfterDisc + gst;
-    } else {
-      // Inclusive
-      gst = (amountAfterDisc * gstPerc) / (100 + gstPerc);
+    if (!formData.includeGST) {
+      gst = (amountAfterDisc * 8.9) / 108.9;
       net = amountAfterDisc;
+    } else {
+      const gstPercentage = Number(formData.gstPercentage) || 0;
+      gst = (amountAfterDisc * gstPercentage) / 100;
+      net = amountAfterDisc + gst;
     }
-    
     const effective = net; // Subsidies no longer affect the final amount
 
     setCalculations({
@@ -148,8 +144,8 @@ const CreateQuotationPage = () => {
     // Clean data for submission
     const submissionData = {
       ...formData,
-      gstPercentage: Number(formData.gstPercentage) || 0,
       isGstInclusive: !formData.includeGST,
+      gstPercentage: formData.includeGST ? (Number(formData.gstPercentage) || 0) : 8.9,
       baseAmount: Number(formData.baseAmount) || 0,
       earlyBirdDiscount: Number(formData.earlyBirdDiscount) || 0,
       additionalDiscount: Number(formData.additionalDiscount) || 0,
@@ -878,7 +874,9 @@ const CreateQuotationPage = () => {
 
               <div className="flex items-center justify-between px-2">
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Apply GST</span>
+                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                    {formData.includeGST ? "GST Added on Top (Exclusive)" : "Included GST (Inclusive)"}
+                  </span>
                   <span className="text-[9px] font-bold text-slate-400">
                     {formData.includeGST ? "GST will be added on top (Exclusive)" : "GST is already included in price (Inclusive)"}
                   </span>
@@ -911,12 +909,13 @@ const CreateQuotationPage = () => {
                   <input 
                     type="number" 
                     step="0.1" 
-                    value={formData.gstPercentage} 
+                    disabled={!formData.includeGST}
+                    value={formData.includeGST ? formData.gstPercentage : 8.9} 
                     onChange={e => setFormData({ ...formData, gstPercentage: e.target.value })} 
                     className={`w-full px-4 py-3 bg-white border-2 rounded-xl outline-none font-black text-lg transition-all ${
                       formData.includeGST 
                         ? 'border-[#f6871e]/20 text-[#f6871e] focus:border-[#f6871e]' 
-                        : 'border-emerald-600/20 text-emerald-600 focus:border-emerald-600'
+                        : 'border-emerald-600/20 text-emerald-600 focus:border-emerald-600 opacity-60 cursor-not-allowed bg-slate-100'
                     }`} 
                   />
                 </div>
@@ -933,8 +932,12 @@ const CreateQuotationPage = () => {
               <div className="py-6 border-y-2 border-slate-50">
                 <div className="flex justify-between items-center">
                   <div className="space-y-0.5">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Net Quotation Value</span>
-                    <p className="text-xs font-bold text-slate-500 italic">(Inclusive of all Taxes)</p>
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      {formData.includeGST ? "Net Quotation Value" : "Net Price (Inclusive of 8.9% GST)"}
+                    </span>
+                    <p className="text-xs font-bold text-slate-500 italic">
+                      {formData.includeGST ? "(Inclusive of all Taxes)" : "(GST Included)"}
+                    </p>
                   </div>
                   <span className="font-black text-2xl text-[#3f7abe]">₹ {calculations.netPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                 </div>
