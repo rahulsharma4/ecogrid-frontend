@@ -714,7 +714,9 @@ const LeadsPage = () => {
                           <SearchableSelect
                             value={formData.assignedTo}
                             onChange={val => setFormData({...formData, assignedTo: val})}
-                            options={staff.map(s => ({ value: s._id, label: s.name.toUpperCase() }))}
+                          options={staff
+                            .filter(s => (s.role === 'staff' && s.status === 'active') || s._id === formData.assignedTo)
+                            .map(s => ({ value: s._id, label: s.name.toUpperCase() }))}
                             placeholder="Select Personnel..."
                             searchPlaceholder="Search personnel..."
                           />
