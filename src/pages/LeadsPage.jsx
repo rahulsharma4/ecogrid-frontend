@@ -545,7 +545,14 @@ const LeadsPage = () => {
             </div>
 
             <div className="mt-auto p-3 bg-slate-50/50 flex items-center justify-between border-t border-slate-50">
-               <div className="flex items-center gap-3">
+               <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href={`tel:${lead.phone}`}
+                    className="flex items-center gap-1 text-[9px] font-black px-3 py-1.5 rounded-lg transition-all uppercase tracking-widest text-white bg-sky-600 hover:bg-sky-700 shadow-sm hover:-translate-y-0.5 active:translate-y-0"
+                    title={`Call ${lead.name}`}
+                  >
+                    <Phone className="w-3 h-3" /> Call
+                  </a>
                   <button onClick={() => navigate(`/dashboard/leads/${lead._id}/history`)} className="flex items-center gap-1 text-[9px] font-black text-slate-600 hover:text-[#3f7abe] transition-all uppercase tracking-wider">
                     <History className="w-3 h-3" /> History
                   </button>

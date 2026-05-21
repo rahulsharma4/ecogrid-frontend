@@ -100,7 +100,13 @@ const LeadHistoryPage = () => {
         <div className="p-8 border-b border-slate-50 bg-slate-50/20 flex flex-wrap items-center gap-10">
             <div className="flex flex-col">
                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Direct Contact</span>
-               <span className="font-black text-slate-900 text-lg">{lead.phone}</span>
+               <a
+                 href={`tel:${lead.phone}`}
+                 className="font-black text-slate-900 text-lg hover:text-[#3f7abe] transition-all hover:scale-102 origin-left inline-block w-fit"
+                 title={`Call ${lead.name}`}
+               >
+                 {lead.phone}
+               </a>
             </div>
             <div className="flex flex-col">
                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Active Phase</span>

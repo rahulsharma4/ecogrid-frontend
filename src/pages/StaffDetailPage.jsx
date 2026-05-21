@@ -123,13 +123,17 @@ const StaffDetailPage = () => {
                         <p className="text-sm font-bold text-slate-700 truncate">{staff.email}</p>
                      </div>
                   </div>
-                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 transition-colors hover:bg-white hover:shadow-lg group">
-                     <Phone className="w-5 h-5 text-slate-400 group-hover:text-emerald-500" />
-                     <div className="min-w-0">
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Direct Comms</p>
-                        <p className="text-sm font-bold text-slate-700">{staff.phone}</p>
-                     </div>
-                  </div>
+                   <a
+                     href={`tel:${staff.phone}`}
+                     className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 transition-colors hover:bg-white hover:shadow-lg hover:border-emerald-200 group"
+                     title={`Call ${staff.name}`}
+                   >
+                      <Phone className="w-5 h-5 text-slate-400 group-hover:text-emerald-500" />
+                      <div className="min-w-0">
+                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Direct Comms</p>
+                         <p className="text-sm font-bold text-slate-700">{staff.phone}</p>
+                      </div>
+                   </a>
                   <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 transition-colors hover:bg-white hover:shadow-lg group">
                      <Calendar className="w-5 h-5 text-slate-400 group-hover:text-orange-500" />
                      <div className="min-w-0">

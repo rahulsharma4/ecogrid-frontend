@@ -649,16 +649,26 @@ const ContactsPage = () => {
                     </span>
                   </td>
                   <td className="p-5 text-right">
-                    {isAdmin ? (
-                      <button
-                        onClick={() => handleDeleteContact(contact._id)}
-                        className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all active:scale-95"
+                    <div className="flex justify-end items-center gap-2">
+                      <a
+                        href={`tel:${contact.phone}`}
+                        className="px-2.5 py-1.5 bg-sky-50 hover:bg-sky-500 text-sky-700 hover:text-white border border-sky-100 hover:border-sky-300 rounded-xl transition-all font-black text-[9px] uppercase tracking-wider flex items-center gap-1.5 active:scale-95 shadow-sm"
+                        title={`Call ${contact.name}`}
                       >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    ) : (
-                      <div className="flex justify-end gap-2">
-                        {contact.status !== 'Converted' ? (
+                        <Phone className="w-3 h-3" />
+                        Call
+                      </a>
+                      
+                      {isAdmin ? (
+                        <button
+                          onClick={() => handleDeleteContact(contact._id)}
+                          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all active:scale-95"
+                          title="Delete Contact"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      ) : (
+                        contact.status !== 'Converted' ? (
                           <>
                             <button
                               onClick={() => openStatusModal(contact)}
@@ -681,9 +691,9 @@ const ContactsPage = () => {
                           <span className="px-2 py-1 bg-teal-50 text-teal-700 border border-teal-100 rounded-lg text-[9px] font-black uppercase tracking-wider">
                             Lead Active
                           </span>
-                        )}
-                      </div>
-                    )}
+                        )
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

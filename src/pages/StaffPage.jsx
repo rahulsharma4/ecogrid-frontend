@@ -199,10 +199,15 @@ const StaffPage = () => {
                   <Mail className="w-3.5 h-3.5 text-slate-300 shrink-0" />
                   <span className="truncate text-[10px]">{member.email}</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
-                  <Phone className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                <a
+                  href={`tel:${member.phone}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-[#3f7abe] transition-all hover:scale-102 origin-left w-fit"
+                  title={`Call ${member.name}`}
+                >
+                  <Phone className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#3f7abe] shrink-0" />
                   <span className="text-[10px]">{member.phone}</span>
-                </div>
+                </a>
               </div>
             </div>
             
