@@ -656,14 +656,37 @@ const QuotationViewPage = () => {
                     </tr>
                   )}
 
-                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#374151' }}>
-                      Net Price{quotation.gstPercentage > 0 ? ` (Inclusive of ${quotation.gstPercentage}% gst)` : ''}
-                    </td>
-                    <td style={{ padding: '6px 4px', textAlign: 'right', fontWeight: '900', color: '#111827' }}>
-                      ₹ {netPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                    </td>
-                  </tr>
+                  {quotation.isGstInclusive ? (
+                    <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#374151' }}>
+                        Net Price (Inclusive of {quotation.gstPercentage}% GST)
+                      </td>
+                      <td style={{ padding: '6px 4px', textAlign: 'right', fontWeight: '900', color: '#111827' }}>
+                        ₹ {netPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                      </td>
+                    </tr>
+                  ) : (
+                    <>
+                      {quotation.gstPercentage > 0 && (
+                        <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                          <td style={{ padding: '6px 4px', color: '#6b7280' }}>
+                            GST ({quotation.gstPercentage}% Extra)
+                          </td>
+                          <td style={{ padding: '6px 4px', textAlign: 'right', color: '#111827', fontWeight: 'bold' }}>
+                            + ₹ {(quotation.gstAmount || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                          </td>
+                        </tr>
+                      )}
+                      <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#374151' }}>
+                          Net Price (Inclusive of all Taxes)
+                        </td>
+                        <td style={{ padding: '6px 4px', textAlign: 'right', fontWeight: '900', color: '#111827' }}>
+                          ₹ {netPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                        </td>
+                      </tr>
+                    </>
+                  )}
 
                   {quotation.centralSubsidy > 0 && (
                     <tr style={{ borderBottom: '1px solid #f1f5f9' }}>

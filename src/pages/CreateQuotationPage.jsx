@@ -114,8 +114,21 @@ const CreateQuotationPage = () => {
     const base = Number(formData.baseAmount) || 0;
     const disc = (Number(formData.earlyBirdDiscount) || 0) + (Number(formData.additionalDiscount) || 0);
     const amountAfterDisc = Math.max(0, base - disc);
-    const gst = formData.includeGST ? ((amountAfterDisc * (Number(formData.gstPercentage) || 0)) / 100) : 0;
-    const net = amountAfterDisc + gst;
+    
+    let gst = 0;
+    let net = 0;
+    const gstPerc = Number(formData.gstPercentage) || 0;
+
+    if (formData.includeGST) {
+      // Exclusive
+      gst = (amountAfterDisc * gstPerc) / 100;
+      net = amountAfterDisc + gst;
+    } else {
+      // Inclusive
+      gst = (amountAfterDisc * gstPerc) / (100 + gstPerc);
+      net = amountAfterDisc;
+    }
+    
     const effective = net; // Subsidies no longer affect the final amount
 
     setCalculations({
@@ -135,7 +148,8 @@ const CreateQuotationPage = () => {
     // Clean data for submission
     const submissionData = {
       ...formData,
-      gstPercentage: formData.includeGST ? (Number(formData.gstPercentage) || 0) : 0,
+      gstPercentage: Number(formData.gstPercentage) || 0,
+      isGstInclusive: !formData.includeGST,
       baseAmount: Number(formData.baseAmount) || 0,
       earlyBirdDiscount: Number(formData.earlyBirdDiscount) || 0,
       additionalDiscount: Number(formData.additionalDiscount) || 0,
@@ -863,7 +877,12 @@ const CreateQuotationPage = () => {
               </div>
 
               <div className="flex items-center justify-between px-2">
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Apply GST</span>
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Apply GST</span>
+                  <span className="text-[9px] font-bold text-slate-400">
+                    {formData.includeGST ? "GST will be added on top (Exclusive)" : "GST is already included in price (Inclusive)"}
+                  </span>
+                </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
@@ -878,18 +897,38 @@ const CreateQuotationPage = () => {
                 </label>
               </div>
 
-              {formData.includeGST && (
-                <div className="grid grid-cols-2 gap-6 p-6 bg-slate-50 rounded-[1.75rem] border border-slate-100 animate-in zoom-in-95 duration-200">
-                  <div className="space-y-2">
-                    <label className="block text-[10px] font-black text-[#f6871e] uppercase tracking-widest ml-1">GST (%)</label>
-                    <input type="number" step="0.1" value={formData.gstPercentage} onChange={e => setFormData({ ...formData, gstPercentage: e.target.value })} className="w-full px-4 py-3 bg-white border-2 border-[#f6871e]/20 rounded-xl outline-none font-black text-lg text-[#f6871e] focus:border-[#f6871e] transition-all" />
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">GST Tax Amount</p>
-                    <p className="font-black text-xl text-slate-900">₹ {calculations.gstAmount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</p>
-                  </div>
+              <div className={`grid grid-cols-2 gap-6 p-6 rounded-[1.75rem] border animate-in zoom-in-95 duration-200 ${
+                formData.includeGST 
+                  ? 'bg-slate-50 border-slate-100' 
+                  : 'bg-emerald-50/20 border-emerald-100/40'
+              }`}>
+                <div className="space-y-2">
+                  <label className={`block text-[10px] font-black uppercase tracking-widest ml-1 ${
+                    formData.includeGST ? 'text-[#f6871e]' : 'text-emerald-600'
+                  }`}>
+                    {formData.includeGST ? "GST (%) (Extra)" : "GST (%) (Included)"}
+                  </label>
+                  <input 
+                    type="number" 
+                    step="0.1" 
+                    value={formData.gstPercentage} 
+                    onChange={e => setFormData({ ...formData, gstPercentage: e.target.value })} 
+                    className={`w-full px-4 py-3 bg-white border-2 rounded-xl outline-none font-black text-lg transition-all ${
+                      formData.includeGST 
+                        ? 'border-[#f6871e]/20 text-[#f6871e] focus:border-[#f6871e]' 
+                        : 'border-emerald-600/20 text-emerald-600 focus:border-emerald-600'
+                    }`} 
+                  />
                 </div>
-              )}
+                <div className="flex flex-col justify-center">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                    {formData.includeGST ? "GST Tax Amount (Extra)" : "GST Tax Amount (Inward)"}
+                  </p>
+                  <p className="font-black text-xl text-slate-900">
+                    ₹ {calculations.gstAmount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                  </p>
+                </div>
+              </div>
 
               <div className="py-6 border-y-2 border-slate-50">
                 <div className="flex justify-between items-center">

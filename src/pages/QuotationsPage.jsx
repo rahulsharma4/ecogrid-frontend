@@ -296,8 +296,9 @@ const QuotationsPage = () => {
                                   systemSize: q.systemSize,
                                   solarPanels: q.solarPanels,
                                   inverter: q.inverter,
-                                  baseAmount: q.baseAmount,
+                                  baseAmount: q.isGstInclusive ? q.netPrice : (q.netPrice - q.gstAmount),
                                   gstPercentage: q.gstPercentage,
+                                  isGstInclusive: q.isGstInclusive,
                                   amountPaid: 0
                                 }, config);
                                 toast.success('Invoice Generated!', { id: loadingToast });

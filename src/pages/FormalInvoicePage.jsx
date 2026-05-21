@@ -210,7 +210,7 @@ const FormalInvoicePage = () => {
                  </thead>
                  <tbody>
                     <tr>
-                       <td style={s.td}>DESIGN, SUPPLY & INSTALLATION OF SOLAR PV SYSTEM</td>
+                       <td style={s.td}>DESIGN, SUPPLY & INSTALLATION OF SOLAR PV SYSTEM {invoice.isGstInclusive && '(GST INCLUSIVE)'}</td>
                        <td style={{ ...s.td, textAlign: 'center' }}>1.00</td>
                        <td style={{ ...s.td, textAlign: 'right' }}>{baseAmt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                        {showGst && <td style={{ ...s.td, textAlign: 'right' }}>{gstAmt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>}
@@ -244,8 +244,8 @@ const FormalInvoicePage = () => {
                      </div>
                    </>
                  )}
-                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: showGst ? '15px' : '0', borderTop: showGst ? '2px solid #e2e8f0' : 'none', fontSize: '16px', fontWeight: '900', color: '#1e4465' }}>
-                    <span>Grand Total</span>
+                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: showGst ? '15px' : '0', borderTop: showGst ? '2px solid #e2e8f0' : 'none', fontSize: '15px', fontWeight: '900', color: '#1e4465' }}>
+                    <span>Grand Total {showGst && invoice.isGstInclusive && '(Inclusive of GST)'}</span>
                     <span>₹{netAmt.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                  </div>
               </div>
