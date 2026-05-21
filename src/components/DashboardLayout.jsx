@@ -17,7 +17,8 @@ import {
   Search,
   Plus,
   Settings,
-  Circle
+  Circle,
+  BookOpen
 } from 'lucide-react';
 
 const DashboardLayout = ({ children }) => {
@@ -57,8 +58,9 @@ const DashboardLayout = ({ children }) => {
   };
 
   const navItems = [
-    { name: 'Home', path: '/dashboard/stats', icon: LayoutDashboard, roles: ['admin', 'staff'] },
+    { name: 'Home', path: '/dashboard/stats', icon: LayoutDashboard, roles: ['admin', 'staff', 'telecaller'] },
     { name: 'Staff', path: '/dashboard/staff-management', icon: Users, roles: ['admin'] },
+    { name: user?.role === 'telecaller' ? 'My Contacts' : 'Contacts', path: '/dashboard/contacts', icon: BookOpen, roles: ['admin', 'telecaller'] },
     { name: 'Leads', path: '/dashboard/leads', icon: UserSquare2, roles: ['admin', 'staff'] },
     { name: 'Quotations', path: '/dashboard/quotations', icon: FileText, roles: ['admin', 'staff'] },
     { name: 'Payments', path: '/dashboard/payments', icon: CreditCard, roles: ['admin', 'staff'] },

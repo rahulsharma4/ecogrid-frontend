@@ -169,10 +169,14 @@ const StaffPage = () => {
                     <h3 className="font-black text-slate-900 leading-none mb-1.5 truncate uppercase tracking-tight text-xs">{member.name}</h3>
                     <div className="flex flex-wrap items-center gap-1.5">
                        <span className={`px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase border flex items-center gap-1 w-fit ${
-                          member.role === 'admin' ? 'bg-[#3f7abe]/5 text-[#3f7abe] border-[#3f7abe]/10' : 'bg-slate-50 text-slate-600 border-slate-100'
+                          member.role === 'admin' ? 'bg-[#3f7abe]/5 text-[#3f7abe] border-[#3f7abe]/10' :
+                          member.role === 'telecaller' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                          'bg-slate-50 text-slate-600 border-slate-100'
                         }`}>
-                          {member.role === 'admin' ? <ShieldCheck className="w-2.5 h-2.5" /> : <Shield className="w-2.5 h-2.5" />}
-                          {member.role}
+                          {member.role === 'admin' ? <ShieldCheck className="w-2.5 h-2.5" /> :
+                           member.role === 'telecaller' ? <Phone className="w-2.5 h-2.5" /> :
+                           <Shield className="w-2.5 h-2.5" />}
+                          {member.role === 'telecaller' ? 'Telecaller' : member.role}
                        </span>
                        <span className={`px-1.5 py-0.5 rounded-md text-[7px] font-black uppercase border w-fit ${
                           member.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-700 border-red-200'
@@ -245,6 +249,19 @@ const StaffPage = () => {
                    <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Phone *</label>
                    <input type="text" name="phone" required value={formData.phone} onChange={handleInputChange} className="input-field" />
                 </div>
+                <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Role *</label>
+                    <select 
+                      name="role" 
+                      required 
+                      value={formData.role} 
+                      onChange={handleInputChange} 
+                      className="input-field bg-white"
+                    >
+                      <option value="staff">Staff</option>
+                      <option value="telecaller">Telecaller Executive</option>
+                    </select>
+                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Temporary Password *</label>
                   <div className="relative group">

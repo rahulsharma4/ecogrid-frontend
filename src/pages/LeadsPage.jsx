@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import SearchableSelect from '../components/UI/SearchableSelect';
 import { 
   Plus, 
   Search, 
@@ -625,8 +626,8 @@ const LeadsPage = () => {
       {/* Add/Edit Modal */}
       {(showAddForm || showEditModal) && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[110] flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-white w-full max-w-3xl rounded-[2.5rem] shadow-xl overflow-hidden my-auto border border-slate-100">
-            <div className="p-8 border-b border-slate-50 flex items-center justify-between bg-[#3f7abe]/[0.01]">
+          <div className="bg-white w-full max-w-3xl rounded-[2.5rem] shadow-xl overflow-visible my-auto border border-slate-100">
+            <div className="p-8 border-b border-slate-50 flex items-center justify-between bg-[#3f7abe]/[0.01] rounded-t-[2.5rem]">
               <div>
                 <h2 className="text-2xl font-black text-slate-900">
                   {showEditModal ? 'Edit Lead' : 'Create Lead'}
@@ -703,10 +704,13 @@ const LeadsPage = () => {
                       {user.role === 'admin' && (
                         <div className="space-y-2">
                           <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Assigned Staff</label>
-                          <select value={formData.assignedTo} onChange={e => setFormData({...formData, assignedTo: e.target.value})} className="input-field">
-                            <option value="">Select Personnel...</option>
-                            {staff.map(s => <option key={s._id} value={s._id}>{s.name.toUpperCase()}</option>)}
-                          </select>
+                          <SearchableSelect
+                            value={formData.assignedTo}
+                            onChange={val => setFormData({...formData, assignedTo: val})}
+                            options={staff.map(s => ({ value: s._id, label: s.name.toUpperCase() }))}
+                            placeholder="Select Personnel..."
+                            searchPlaceholder="Search personnel..."
+                          />
                         </div>
                       )}
                     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { ArrowLeft, Loader2, FileDown, X, Phone, Mail, Globe } from 'lucide-react';
+import { ArrowLeft, Loader2, FileDown, X, Phone, Mail, Globe, Zap, Cpu, Calendar, Layers, Droplet, Building, Wifi, Home } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -347,85 +347,377 @@ const QuotationViewPage = () => {
         </div>
 
         {/* PAGE 6: COMMERCIALS */}
-        <div ref={el => pagesRef.current[5] = el} style={{ ...pageStyle, padding: '50px' }}>
-          <TopRightTriangle />
-          <LogoHeader logo={logoBase64} />
+        <div ref={el => pagesRef.current[5] = el} style={{ 
+          ...pageStyle, 
+          background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', 
+          padding: '40px 30px', 
+          color: 'white',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}>
           
-          <h1 style={{ fontSize: '36px', fontWeight: '900', color: '#1b315b', textAlign: 'center', marginTop: '60px', position: 'relative', zIndex: 10 }}>
-            Our offer for <span style={{ color: '#0284c7' }}>you</span>
+          {/* Header Title */}
+          <h1 style={{ 
+            fontSize: '32px', 
+            fontWeight: '900', 
+            textAlign: 'center', 
+            marginTop: '10px', 
+            marginBottom: '20px', 
+            color: 'white',
+            letterSpacing: '-0.5px'
+          }}>
+            Our offer for <span style={{ color: '#fde047' }}>you</span>
           </h1>
-          
-          <div style={{ backgroundColor: '#1b315b', padding: '30px', textAlign: 'center', marginTop: '30px', position: 'relative', zIndex: 10 }}>
-            <h2 style={{ color: 'white', fontSize: '24px', fontWeight: '900', margin: '0 0 10px 0' }}>Mr. {quotation.lead?.name || 'Customer'}</h2>
-            <p style={{ color: 'white', fontSize: '18px', margin: 0 }}>Project Address: {quotation.lead?.address || 'N/A'}</p>
-          </div>
 
-          <div style={{ textAlign: 'center', marginTop: '20px', position: 'relative', zIndex: 10 }}>
-            <div style={{ display: 'inline-block', backgroundColor: '#1b315b', color: 'white', padding: '10px 30px', fontSize: '24px', fontWeight: '900' }}>
-              Payment Milestone
+          {/* Glassmorphic/White Card */}
+          <div style={{ 
+            backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+            borderRadius: '24px', 
+            padding: '24px 20px', 
+            color: '#1e1b4b',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)',
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            maxHeight: '750px',
+            overflow: 'hidden'
+          }}>
+            {/* Customer Details */}
+            <div style={{ marginBottom: '15px' }}>
+              <h2 style={{ fontSize: '22px', fontWeight: '900', color: '#4f46e5', margin: '0 0 4px 0' }}>
+                {quotation.lead?.name || 'Customer'}
+              </h2>
+              <p style={{ fontSize: '11px', fontWeight: 'bold', color: '#6b7280', margin: 0 }}>
+                {quotation.lead?.phone || 'N/A'} - {quotation.lead?.address || 'N/A'}
+              </p>
+            </div>
+
+            {/* Technical Specifications Grid */}
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: '1fr 1fr', 
+              gap: '12px 20px',
+              backgroundColor: '#f5f3ff',
+              padding: '16px',
+              borderRadius: '16px',
+              marginBottom: '15px'
+            }}>
+              {/* Item 1: System Size */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  flexShrink: 0
+                }}>
+                  <Zap size={14} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>System size</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b' }}>{quotation.systemSize}</div>
+                </div>
+              </div>
+
+              {/* Item 2: Solar Panels */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '9px',
+                  flexShrink: 0
+                }}>
+                  ZS
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>Solar Panels</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b', maxWidth: '170px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={quotation.solarPanels}>
+                    {quotation.solarPanels}
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 3: Inverter */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  flexShrink: 0
+                }}>
+                  <Cpu size={14} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>Inverter</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b', maxWidth: '170px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={quotation.inverter}>
+                    {quotation.inverter}
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 4: Quotation Date */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  flexShrink: 0
+                }}>
+                  <Calendar size={14} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>Quotation Date</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b' }}>
+                    {new Date(quotation.date || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 5: Structure Type */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  flexShrink: 0
+                }}>
+                  <Layers size={14} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>Structure type</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b', maxWidth: '170px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={quotation.structureType}>
+                    {quotation.structureType || 'Approved Make'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 6: Cleaning Frequency */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  flexShrink: 0
+                }}>
+                  <Droplet size={14} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>Cleaning frequency</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b' }}>{quotation.cleaningFrequency || 'NO'}</div>
+                </div>
+              </div>
+
+              {/* Item 7: Offering */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '9px',
+                  flexShrink: 0
+                }}>
+                  S
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>Offering</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b' }}>{quotation.offering || 'EcoGrid'}</div>
+                </div>
+              </div>
+
+              {/* Item 8: Floor Height */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  flexShrink: 0
+                }}>
+                  <Building size={14} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>Floor Height</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b' }}>{quotation.floorHeight || 'G+0'}</div>
+                </div>
+              </div>
+
+              {/* Item 9: GSM Based */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  flexShrink: 0
+                }}>
+                  <Wifi size={14} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>GSM Based</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b' }}>{quotation.gsmBased || 'No'}</div>
+                </div>
+              </div>
+
+              {/* Item 10: Inverter Location */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ 
+                  backgroundColor: '#818cf8', 
+                  borderRadius: '50%', 
+                  width: '28px', 
+                  height: '28px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  color: 'white',
+                  flexShrink: 0
+                }}>
+                  <Home size={14} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>Inverter Location</div>
+                  <div style={{ fontSize: '11px', fontWeight: '900', color: '#1e1b4b' }}>{quotation.inverterLocation || 'Ground'}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Price Estimator Table */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '10.5px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                    <th style={{ textAlign: 'left', padding: '6px 4px', fontWeight: '900', color: '#4f46e5', textTransform: 'uppercase', fontSize: '10px' }}>Price</th>
+                    <th style={{ textAlign: 'right', padding: '6px 4px', fontWeight: '900', color: '#4f46e5', textTransform: 'uppercase', fontSize: '10px' }}>Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#374151' }}>Rooftop System</td>
+                    <td style={{ padding: '6px 4px', textAlign: 'right', fontWeight: 'bold', color: '#111827' }}>₹ {basePrice.toLocaleString('en-IN')}</td>
+                  </tr>
+                  
+                  {quotation.earlyBirdDiscount > 0 && (
+                    <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: '6px 4px', color: '#6b7280' }}>Early bird discount</td>
+                      <td style={{ padding: '6px 4px', textAlign: 'right', color: '#dc2626', fontWeight: 'bold' }}>- ₹ {quotation.earlyBirdDiscount.toLocaleString('en-IN')}</td>
+                    </tr>
+                  )}
+
+                  {quotation.additionalDiscount > 0 && (
+                    <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: '6px 4px', color: '#6b7280' }}>Discount</td>
+                      <td style={{ padding: '6px 4px', textAlign: 'right', color: '#dc2626', fontWeight: 'bold' }}>- ₹ {quotation.additionalDiscount.toLocaleString('en-IN')}</td>
+                    </tr>
+                  )}
+
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '6px 4px', fontWeight: 'bold', color: '#374151' }}>
+                      Net Price{quotation.gstPercentage > 0 ? ` (Inclusive of ${quotation.gstPercentage}% gst)` : ''}
+                    </td>
+                    <td style={{ padding: '6px 4px', textAlign: 'right', fontWeight: '900', color: '#111827' }}>
+                      ₹ {netPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                    </td>
+                  </tr>
+
+                  {quotation.centralSubsidy > 0 && (
+                    <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: '6px 4px', color: '#6b7280' }}>Central Govt. Direct Benefit Transfer</td>
+                      <td style={{ padding: '6px 4px', textAlign: 'right', color: '#059669', fontWeight: 'bold' }}>- ₹ {quotation.centralSubsidy.toLocaleString('en-IN')}</td>
+                    </tr>
+                  )}
+
+                  {quotation.stateSubsidy > 0 && (
+                    <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: '6px 4px', color: '#6b7280' }}>UPNEEDA Subsidy</td>
+                      <td style={{ padding: '6px 4px', textAlign: 'right', color: '#059669', fontWeight: 'bold' }}>- ₹ {quotation.stateSubsidy.toLocaleString('en-IN')}</td>
+                    </tr>
+                  )}
+
+                  {/* Net Effective Price Highlight Row */}
+                  <tr style={{ 
+                    background: 'linear-gradient(90deg, #fef08a 0%, #fde047 100%)', 
+                    borderRadius: '8px', 
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                  }}>
+                    <td style={{ padding: '8px 10px', fontWeight: '900', color: '#78350f', borderTopLeftRadius: '8px', borderBottomLeftRadius: '8px' }}>
+                      Net Effective Price*
+                    </td>
+                    <td style={{ padding: '8px 10px', textAlign: 'right', fontWeight: '900', color: '#78350f', borderTopRightRadius: '8px', borderBottomRightRadius: '8px', fontSize: '12px' }}>
+                      ₹ {netEffective.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Note Section */}
+            <div style={{ 
+              marginTop: '15px', 
+              fontSize: '7.5px', 
+              color: '#6b7280', 
+              lineHeight: '1.4', 
+              borderTop: '1px solid #e2e8f0', 
+              paddingTop: '8px' 
+            }}>
+              <b>Note</b><br/>
+              1. Once the commissioning is completed by MNRE, the subsidy amount will be directly transferred to the beneficiary's account.<br/>
+              2. The applicable subsidy amount is determined according to the MNRE declaration. For more details regarding the MNRE subsidy.
             </div>
           </div>
 
-          <div style={{ padding: '0 40px', marginTop: '30px', position: 'relative', zIndex: 10 }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center', border: '1px solid black' }}>
-              <thead>
-                <tr>
-                  <th style={{ border: '1px solid black', padding: '15px', color: '#0284c7', fontSize: '16px', width: '60%' }}>Price</th>
-                  <th style={{ border: '1px solid black', padding: '15px', color: '#0284c7', fontSize: '16px', width: '40%' }}>Cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>Rooftop On-grid Solar System</td>
-                  <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>₹{basePrice.toLocaleString('en-IN')}</td>
-                </tr>
-                {quotation.earlyBirdDiscount > 0 && (
-                  <tr>
-                    <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>Early Bird Discount</td>
-                    <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>- ₹{quotation.earlyBirdDiscount.toLocaleString('en-IN')}</td>
-                  </tr>
-                )}
-                {quotation.additionalDiscount > 0 && (
-                  <tr>
-                    <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>Additional Discount</td>
-                    <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>- ₹{quotation.additionalDiscount.toLocaleString('en-IN')}</td>
-                  </tr>
-                )}
-                <tr>
-                  <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>Net Price (inclusive of {quotation.gstPercentage || 0}% gst)</td>
-                  <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>₹{netPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</td>
-                </tr>
-                {quotation.centralSubsidy > 0 && (
-                  <tr>
-                    <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>Expected Central Subsidy</td>
-                    <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>₹{quotation.centralSubsidy.toLocaleString('en-IN')}</td>
-                  </tr>
-                )}
-                {quotation.stateSubsidy > 0 && (
-                  <tr>
-                    <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>Expected State Subsidy</td>
-                    <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>₹{quotation.stateSubsidy.toLocaleString('en-IN')}</td>
-                  </tr>
-                )}
-                <tr>
-                  <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>Net Effective Price*</td>
-                  <td style={{ border: '1px solid black', padding: '15px', fontWeight: '900', fontSize: '14px' }}>₹{netEffective.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</td>
-                </tr>
-              </tbody>
-            </table>
-            
-            <div style={{ marginTop: '40px', fontSize: '8px', color: '#1b315b', lineHeight: '1.4' }}>
-              Note<br/>
-              1. The applicable subsidy amount is determined according to the MNRE declaration.<br/>
-              2. The advance payment is non-refundable.<br/>
-              3. This quote is valid for 7 days after the date given above.
-            </div>
+          {/* Footer Website link */}
+          <div style={{ textAlign: 'center', marginTop: '15px', zIndex: 10 }}>
+            <span style={{ fontSize: '14px', color: 'white', fontWeight: '700', letterSpacing: '0.5px' }}>
+              www.solarecogrid.com
+            </span>
           </div>
 
-          <BottomTriangles />
-          <div style={{ position: 'absolute', bottom: '20px', left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>
-            <span style={{ fontSize: '18px', color: '#1b315b', fontWeight: '500' }}>www.solarecogrid.com</span>
-          </div>
         </div>
 
         {/* PAGE 7: TECHNICAL SPECS TABLE */}
@@ -451,62 +743,62 @@ const QuotationViewPage = () => {
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Solar Panels<br/>30 Year Performance<br/>Warranty</td>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.solarPanels}</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Adani/Luminous</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>As per capacity</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>{quotation.solarPanelsMake || 'Adani/Luminous'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.solarPanelsQty || 'As per capacity'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Inverter (On-Grid)<br/>10 / 7 Year Warranty</td>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>{quotation.inverter}</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>Solis</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>1 Unit</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.inverterMake || 'Solis'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.inverterQty || '1 Unit'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Solar panel<br/>mounting structure</td>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.structureType || 'HDGI Rust-free solar structure- strong, durable, and weather-resistance'}</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.systemSize}</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>For panels</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.structureMake || 'Approved Make'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.structureQty || 'For panels'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>ACDB (AC Distribution<br/>Box)</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>For Safe AC Distribution, IP65</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>Polycab</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>1 Unit</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>{quotation.acdbDetails || 'For Safe AC Distribution, IP65'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.acdbMake || 'Polycab'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.acdbQty || '1 Unit'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>DCDB (DC Distribution<br/>Box)</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>For Safe DC Distribution, IP65</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>Polycab</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>1 Unit</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>{quotation.dcdbDetails || 'For Safe DC Distribution, IP65'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.dcdbMake || 'Polycab'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.dcdbQty || '1 Unit'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>3 Copper Earthing</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Standard earthing for electrical safety</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>True Power</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>3 Unit</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>{quotation.earthingDetails || 'Standard earthing for electrical safety'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.earthingMake || 'True Power'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.earthingQty || '3 Unit'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Closed Wiring in PVC<br/>Conduit Pipe</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>For safe and secure wiring</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}></td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>As per Requirement</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>{quotation.wiringDetails || 'For safe and secure wiring'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.wiringMake || ''}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.wiringQty || 'As per Requirement'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Cables & Accessories</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Cu wire 4mm</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>Polycab</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>1 Set</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>{quotation.cablesDetails || 'Cu wire 4mm'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.cablesMake || 'Polycab'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.cablesQty || '1 Set'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Lightning Arrestor</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Safely grounds lighting, protecting structure and equipment.</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>Approved Make</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>1 Set</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>{quotation.lightningDetails || 'Safely grounds lighting, protecting structure and equipment.'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.lightningMake || 'Approved Make'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.lightningQty || '1 Set'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Installation & Labour</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>Complete Installation & Setup</td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}></td>
-                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>Each</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px', fontWeight: 'bold' }}>{quotation.installationDetails || 'Complete Installation & Setup'}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.installationMake || ''}</td>
+                  <td style={{ border: '1px solid black', padding: '10px', fontSize: '11px' }}>{quotation.installationQty || 'Each'}</td>
                 </tr>
               </tbody>
             </table>
@@ -538,7 +830,7 @@ const QuotationViewPage = () => {
               <tbody>
                 <tr>
                   <td style={{ border: '1px solid #e2e8f0', padding: '15px', fontSize: '10px', color: '#475569' }}>
-                    <b>Zero repair cost guarantee:</b> Solar Eco Grid selects the most suitable components that go in your solar plant. Hence you don't have to pay out of your pocket for any repairs, replacements or spare parts that are required during regular maintenance over the next 5 year.
+                    <b>Zero paper cost guarantee:</b> Solar Eco Grid selects the most suitable components that go in your solar plant. you don't have to pay out of your pocket for any repairs, replacements or spare parts that are required during regular maintenance over the next 5 year.
                   </td>
                   <td style={{ border: '1px solid #e2e8f0', padding: '15px', fontSize: '10px', color: '#475569' }}>
                     Any external damage due to human intervention or unpredictable nature events will make the warranty void.
@@ -546,7 +838,7 @@ const QuotationViewPage = () => {
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #e2e8f0', padding: '15px', fontSize: '10px', color: '#475569' }}>
-                    <b>Solar Panel Door 2 Door warranty:</b> No question asked solar panel replacement with no dependency on OEM.
+                    <b>Solar Panel Door 2 Door warranty</b><br/>No question asked solar panel replacement with no dependency on OEM.
                   </td>
                   <td style={{ border: '1px solid #e2e8f0', padding: '15px', fontSize: '10px', color: '#475569' }}>
                     Any external damage due to human intervention or unpredictable nature events will make the warranty void.
@@ -554,15 +846,15 @@ const QuotationViewPage = () => {
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #e2e8f0', padding: '15px', fontSize: '10px', color: '#475569' }}>
-                    <b>Anti Cyclone:</b> Your structures are certified for high wind speeds of upto 100 KMPH. In case there is any damage to your plant due to weather conditions like cyclones below this threshold, Solar Eco Grid will repair/replace your plant for free.
+                    <b>Anti Cyclone:</b><br/>Your structures are certified for high wind speeds of upto 200 KMPH. In case there is any damage to your plant due to weather conditions like cyclones below this threshold, Solar Eco Grid will repair/replace your plant for free.
                   </td>
                   <td style={{ border: '1px solid #e2e8f0', padding: '15px', fontSize: '10px', color: '#475569' }}>
-                    Any external damage due to human intervention.
+                    Any external damage due to human intervention
                   </td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #e2e8f0', padding: '15px', fontSize: '10px', color: '#475569' }}>
-                    <b>Upto Rs. 1 Lac water leakage coverage:</b> We use Seal to safeguard you against any water seepage issues on your roof. Hence we provide a water leakage cover of upto INR 1 Lac in case of any damages.
+                    <b>Upto Rs. 1 Lac water leakage coverage:</b><br/>We use Seal to safeguard you against any water seepage issues on your roof. Hence we provide a water leakage cover of upto INR 1 Lac in case of any damages.
                   </td>
                   <td style={{ border: '1px solid #e2e8f0', padding: '15px', fontSize: '10px', color: '#475569' }}>
                     Any seepage in non-solar area due to pre-existing condition or any other non-related work.

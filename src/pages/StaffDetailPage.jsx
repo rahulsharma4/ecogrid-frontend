@@ -113,7 +113,7 @@ const StaffDetailPage = () => {
                   <h2 className="text-2xl font-black text-slate-900 truncate uppercase">{staff.name}</h2>
                   <Shield className="w-5 h-5 text-[#3f7abe]" />
                </div>
-               <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">{staff.role} Operative</p>
+               <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">{staff.role === 'telecaller' ? 'Telecaller' : staff.role} Operative</p>
                
                <div className="mt-8 space-y-4">
                   <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 transition-colors hover:bg-white hover:shadow-lg group">
