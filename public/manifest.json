@@ -1,0 +1,28 @@
+{
+  "short_name": "EcoGrid",
+  "name": "EcoGrid CRM Command Center",
+  "description": "Enterprise CRM and Project Command Center for EcoGrid Infra",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo192.jpeg",
+      "type": "image/jpeg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.jpeg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#3f7abe",
+  "background_color": "#f8fafc"
+}

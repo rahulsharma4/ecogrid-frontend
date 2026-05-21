@@ -1,0 +1,127 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap');
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --color-primary: #3f7abe;
+  --color-secondary: #f6871e;
+  --color-surface: #ffffff;
+  --color-background: #f8fafc;
+  --color-text: #0f172a; /* Darker slate-900 for better contrast */
+  --color-text-muted: #475569; /* Slate-600 instead of 500 for better visibility */
+}
+
+@layer base {
+  * {
+    border-color: #eef2f6;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: contain;
+  }
+  button, a {
+    cursor: pointer !important;
+    user-select: none;
+  }
+  input, textarea {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+  }
+}
+
+@layer components {
+  .glass-card {
+    background-color: white;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    border-radius: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-primary {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 1rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary:hover { 
+    background-color: #33629c; 
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(63, 122, 190, 0.3);
+  }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-secondary);
+    color: white;
+    border-radius: 1rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-secondary:hover { 
+    background-color: #e0761a;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(246, 135, 30, 0.3);
+  }
+  .btn-secondary:active { transform: scale(0.98); }
+
+  .input-field {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    background-color: #f8fafc;
+    border: 2px solid transparent;
+    border-radius: 1rem;
+    transition: all 0.2s ease;
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+  .input-field:focus {
+    background-color: white;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(63, 122, 190, 0.05);
+  }
+
+  .badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+@media (max-width: 768px) {
+  .btn-primary, .btn-secondary {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.8125rem;
+  }
+  .glass-card {
+    border-radius: 1.25rem;
+  }
+}
