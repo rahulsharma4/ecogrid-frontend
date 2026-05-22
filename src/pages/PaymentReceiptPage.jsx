@@ -22,6 +22,11 @@ const PaymentReceiptPage = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [logoBase64, setLogoBase64] = useState('');
   const [sealBase64, setSealBase64] = useState('');
+  const [projectSummary, setProjectSummary] = useState({
+    systemSize: 'N/A',
+    solarPanels: 'N/A',
+    inverter: 'N/A'
+  });
   const receiptRef = useRef();
 
   const numberToWords = (num) => {
@@ -100,6 +105,43 @@ const PaymentReceiptPage = () => {
         const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/payments`, config);
         const found = data.find(p => p._id === id);
         setPayment(found);
+
+        if (found && found.leadId) {
+          const leadId = found.leadId._id || found.leadId;
+          try {
+            // Try fetching invoices first
+            const { data: invoices } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/invoices`, config);
+            const matchingInvoice = invoices.find(inv => {
+              const invLeadId = inv.lead?._id || inv.lead;
+              return invLeadId === leadId;
+            });
+
+            if (matchingInvoice) {
+              setProjectSummary({
+                systemSize: matchingInvoice.systemSize || 'N/A',
+                solarPanels: matchingInvoice.solarPanels || 'N/A',
+                inverter: matchingInvoice.inverter || 'N/A'
+              });
+            } else {
+              // Try fetching quotations if invoice not found
+              const { data: quotations } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/quotations`, config);
+              const matchingQuotation = quotations.find(q => {
+                const qLeadId = q.lead?._id || q.lead;
+                return qLeadId === leadId;
+              });
+
+              if (matchingQuotation) {
+                setProjectSummary({
+                  systemSize: matchingQuotation.systemSize || 'N/A',
+                  solarPanels: matchingQuotation.solarPanels || 'N/A',
+                  inverter: matchingQuotation.inverter || 'N/A'
+                });
+              }
+            }
+          } catch (fetchErr) {
+            console.error('Error fetching project summary details:', fetchErr);
+          }
+        }
       } catch (err) { console.error(err); } finally { setLoading(false); }
     };
     fetchPayment();
@@ -213,18 +255,18 @@ const PaymentReceiptPage = () => {
            {/* Customer Details */}
            <div style={s.main}>
               <h3 style={s.sectionTitle}>Customer Details</h3>
-              <div style={s.detailsGrid}>
-                 <div style={s.label}>Name</div>
-                 <div style={s.value}>{payment.leadId?.name?.toUpperCase() || 'SURAJ KUMAR YADAV'}</div>
-                 
-                 <div style={s.label}>Phone</div>
-                 <div style={s.value}>{payment.leadId?.phone || '9876543210'}</div>
-                 
-                 <div style={s.label}>Email</div>
-                 <div style={s.value}>{payment.leadId?.email || 'N/A'}</div>
-                 
-                 <div style={s.label}>Address</div>
-                 <div style={s.value}>{payment.leadId?.address?.toUpperCase() || 'LUCKNOW UP'}</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', marginBottom: '30px' }}>
+                 <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: '10px', fontSize: '11px', fontWeight: '700' }}>
+                    <div style={{ color: '#64748b' }}>Name</div><div style={{ color: '#0f172a' }}>{payment.leadId?.name?.toUpperCase() || 'SURAJ KUMAR YADAV'}</div>
+                    <div style={{ color: '#64748b' }}>Phone</div><div style={{ color: '#0f172a' }}>{payment.leadId?.phone || '9876543210'}</div>
+                    <div style={{ color: '#64748b' }}>Email</div><div style={{ color: '#0f172a' }}>{payment.leadId?.email || 'N/A'}</div>
+                    <div style={{ color: '#64748b' }}>Address</div><div style={{ color: '#0f172a', lineHeight: '1.4' }}>{payment.leadId?.address?.toUpperCase() || 'LUCKNOW UP'}</div>
+                 </div>
+                 <div style={{ backgroundColor: '#f8fafc', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                    <p style={{ fontSize: '9px', fontWeight: '900', color: '#64748b', textTransform: 'uppercase', marginBottom: '8px' }}>Project Summary</p>
+                    <p style={{ fontSize: '12px', fontWeight: '900', color: '#1e4465' }}>{projectSummary.systemSize} SOLAR PV SYSTEM</p>
+                    <p style={{ fontSize: '9px', fontWeight: '600', color: '#64748b', marginTop: '4px' }}>Panels: {projectSummary.solarPanels} | Inv: {projectSummary.inverter}</p>
+                 </div>
               </div>
 
               {/* Table */}
