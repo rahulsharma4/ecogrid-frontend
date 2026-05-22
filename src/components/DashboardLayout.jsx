@@ -59,7 +59,7 @@ const DashboardLayout = ({ children }) => {
 
   const navItems = [
     { name: 'Home', path: '/dashboard/stats', icon: LayoutDashboard, roles: ['admin', 'staff', 'telecaller'] },
-    { name: 'Staff', path: '/dashboard/staff-management', icon: Users, roles: ['admin'] },
+    { name: 'Consultants', path: '/dashboard/consultants', icon: Users, roles: ['admin'] },
     { name: user?.role === 'telecaller' ? 'My Contacts' : 'Contacts', path: '/dashboard/contacts', icon: BookOpen, roles: ['admin', 'telecaller'] },
     { name: 'Leads', path: '/dashboard/leads', icon: UserSquare2, roles: ['admin', 'staff'] },
     { name: 'Quotations', path: '/dashboard/quotations', icon: FileText, roles: ['admin', 'staff'] },
@@ -165,7 +165,9 @@ const DashboardLayout = ({ children }) => {
             {isSidebarOpen && (
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-bold text-slate-900 truncate">{user?.name}</span>
-                <span className="text-[10px] text-[#3f7abe] font-bold uppercase tracking-wider">{user?.role}</span>
+                <span className="text-[10px] text-[#3f7abe] font-bold uppercase tracking-wider">
+                  {user?.role === 'staff' ? 'consultant' : user?.role}
+                </span>
               </div>
             )}
           </div>

@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import LoginPage from './pages/LoginPage';
 import DashboardLayout from './components/DashboardLayout';
-import StaffPage from './pages/StaffPage';
+import ConsultantsPage from './pages/ConsultantsPage';
 import LeadsPage from './pages/LeadsPage';
 import PaymentsPage from './pages/PaymentsPage';
 import RegisterPage from './pages/RegisterPage';
@@ -16,7 +16,7 @@ import InvoicesPage from './pages/InvoicesPage';
 import QuotationViewPage from './pages/QuotationViewPage';
 import PaymentReceiptPage from './pages/PaymentReceiptPage';
 import FormalInvoicePage from './pages/FormalInvoicePage';
-import StaffDetailPage from './pages/StaffDetailPage';
+import ConsultantDetailPage from './pages/ConsultantDetailPage';
 import ContactsPage from './pages/ContactsPage';
 import ContactDetailPage from './pages/ContactDetailPage';
 
@@ -76,8 +76,8 @@ function App() {
                     <Route path="quotations/view/:id" element={<QuotationViewPage />} />
                     <Route path="invoices" element={<InvoicesPage />} />
                     <Route path="invoices/view/:id" element={<FormalInvoicePage />} />
-                    <Route path="staff-management" element={<AdminRoute><StaffPage /></AdminRoute>} />
-                    <Route path="staff/:id" element={<AdminRoute><StaffDetailPage /></AdminRoute>} />
+                    <Route path="consultants" element={<AdminRoute><ConsultantsPage /></AdminRoute>} />
+                    <Route path="consultants/:id" element={<AdminRoute><ConsultantDetailPage /></AdminRoute>} />
                     <Route path="contacts" element={<ContactsPage />} />
                     <Route path="contacts/:id" element={<ContactDetailPage />} />
                     <Route path="payments" element={<PaymentsPage />} />

@@ -710,15 +710,15 @@ const LeadsPage = () => {
                       </div>
                       {user.role === 'admin' && (
                         <div className="space-y-2">
-                          <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Assigned Staff</label>
+                          <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Assigned Consultant</label>
                           <SearchableSelect
                             value={formData.assignedTo}
                             onChange={val => setFormData({...formData, assignedTo: val})}
-                          options={staff
-                            .filter(s => s.role === 'staff' && s.status === 'active')
-                            .map(s => ({ value: s._id, label: s.name.toUpperCase() }))}
-                            placeholder="Select Personnel..."
-                            searchPlaceholder="Search personnel..."
+                            options={staff
+                              .filter(s => s.role === 'staff' && s.status === 'active')
+                              .map(s => ({ value: s._id, label: s.name.toUpperCase() }))}
+                            placeholder="Select Consultant..."
+                            searchPlaceholder="Search consultant..."
                           />
                         </div>
                       )}
