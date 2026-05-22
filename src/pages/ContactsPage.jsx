@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
@@ -33,7 +33,9 @@ import {
   Briefcase,
   Smartphone,
   CreditCard,
-  Target
+  Target,
+  Filter,
+  RotateCcw
 } from 'lucide-react';
 
 const statusColors = {
@@ -53,6 +55,15 @@ const ContactsPage = () => {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Filter States
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const filterRef = useRef(null);
+  const [filters, setFilters] = useState({
+    status: 'All',
+    fromDate: '',
+    toDate: ''
+  });
   
   // Admin Modals & Selection State
   const [showAddModal, setShowAddModal] = useState(false);
@@ -153,6 +164,15 @@ const ContactsPage = () => {
 
   useEffect(() => {
     fetchData();
+
+    // Close dropdown on click outside
+    const handleClickOutside = (event) => {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setShowFilterDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleInputChange = (e) => {
@@ -553,11 +573,29 @@ const ContactsPage = () => {
     );
   };
 
-  const filteredContacts = contacts.filter(c => 
-    c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.phone.includes(searchTerm) ||
-    c.address.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredContacts = contacts.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.phone.includes(searchTerm) ||
+      c.address.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesStatus = filters.status === 'All' || c.status === filters.status;
+    
+    // Date Filtering
+    let matchesDate = true;
+    if (filters.fromDate || filters.toDate) {
+      const contactDate = new Date(c.createdAt);
+      if (filters.fromDate && contactDate < new Date(filters.fromDate)) matchesDate = false;
+      if (filters.toDate) {
+        const toDate = new Date(filters.toDate);
+        toDate.setHours(23, 59, 59, 999);
+        if (contactDate > toDate) matchesDate = false;
+      }
+    }
+
+    return matchesSearch && matchesStatus && matchesDate;
+  });
+
+  const activeFilterCount = (filters.status !== 'All' ? 1 : 0) + (filters.fromDate ? 1 : 0) + (filters.toDate ? 1 : 0);
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center h-64 gap-4">
@@ -621,6 +659,91 @@ const ContactsPage = () => {
             className="input-field pl-10"
           />
         </div>
+
+        {/* Filter Popover */}
+        <div className="relative w-full lg:w-auto" ref={filterRef}>
+          <button 
+            onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+            className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border transition-all text-xs font-bold uppercase tracking-wider w-full lg:w-auto ${
+              activeFilterCount > 0 
+              ? 'bg-[#3f7abe]/5 border-[#3f7abe] text-[#3f7abe]' 
+              : 'bg-white border-slate-200 text-slate-600 hover:border-slate-400'
+            }`}
+          >
+            <Filter className="w-4 h-4" />
+            Filters
+            {activeFilterCount > 0 && (
+              <span className="w-5 h-5 bg-[#3f7abe] text-white rounded-full flex items-center justify-center text-[10px]">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
+
+          {showFilterDropdown && (
+            <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 p-6 animate-in zoom-in-95 duration-200">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="font-bold text-slate-900">Refine Results</h3>
+                <button 
+                  onClick={() => {
+                    setFilters({ status: 'All', fromDate: '', toDate: '' });
+                    setShowFilterDropdown(false);
+                  }}
+                  className="text-[10px] font-black text-[#3f7abe] uppercase hover:underline flex items-center gap-1"
+                >
+                  <RotateCcw className="w-3 h-3" /> Reset
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Contact Status</label>
+                  <select 
+                    value={filters.status}
+                    onChange={(e) => setFilters({...filters, status: e.target.value})}
+                    className="input-field bg-slate-50 border-none w-full"
+                  >
+                    <option value="All">All Statuses</option>
+                    {Object.keys(statusColors).map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                    <Calendar className="w-3.5 h-3.5" /> Creation Timeline
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <p className="text-[9px] text-slate-500 font-bold uppercase ml-1">From</p>
+                      <input 
+                        type="date" 
+                        value={filters.fromDate}
+                        onChange={(e) => setFilters({...filters, fromDate: e.target.value})}
+                        className="input-field text-xs py-2 px-3 bg-slate-50 border-none w-full" 
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[9px] text-slate-500 font-bold uppercase ml-1">To</p>
+                      <input 
+                        type="date" 
+                        value={filters.toDate}
+                        onChange={(e) => setFilters({...filters, toDate: e.target.value})}
+                        className="input-field text-xs py-2 px-3 bg-slate-50 border-none w-full" 
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setShowFilterDropdown(false)}
+                  className="w-full btn-primary justify-center py-3 text-[10px] uppercase tracking-widest shadow-lg shadow-[#3f7abe]/20 mt-2"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-xl border border-slate-100 self-start lg:self-center">
           <UserCheck className="w-4 h-4 text-[#3f7abe]" />
           <span className="text-[10px] font-black uppercase text-slate-600 tracking-widest">{filteredContacts.length} Contacts Found</span>
