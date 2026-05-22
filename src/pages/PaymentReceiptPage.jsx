@@ -171,25 +171,25 @@ const PaymentReceiptPage = () => {
   };
 
   const s = {
-    container: { width: '794px', minHeight: '1123px', backgroundColor: '#ffffff', fontFamily: '"Inter", "Segoe UI", Tahoma, sans-serif', color: '#1e293b', textAlign: 'left', position: 'relative' },
-    header: { backgroundColor: '#1e4465', padding: '30px 40px', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
+    container: { width: '794px', minHeight: '1123px', backgroundColor: '#ffffff', fontFamily: "'Plus Jakarta Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif", color: '#1e293b', textAlign: 'left', position: 'relative' },
+    header: { backgroundColor: '#3f7abe', padding: '30px 40px', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
     logoBox: { backgroundColor: '#ffffff', padding: '12px', borderRadius: '4px', display: 'inline-block' },
     bookingBadge: { border: '1px solid rgba(255,255,255,0.4)', borderRadius: '8px', padding: '10px 20px', textAlign: 'center', backgroundColor: 'rgba(255,255,255,0.05)' },
-    bar: { backgroundColor: '#f1f5f9', padding: '15px 40px', borderBottom: '2px solid #1e4465', display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: '800', color: '#64748b' },
-    amountSection: { backgroundColor: '#1e4465', padding: '30px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#ffffff' },
+    bar: { backgroundColor: '#f1f5f9', padding: '15px 40px', borderBottom: '2px solid #3f7abe', display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: '800', color: '#64748b' },
+    amountSection: { backgroundColor: '#3f7abe', padding: '30px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#ffffff' },
     main: { padding: '40px' },
     sectionTitle: { fontSize: '12px', fontWeight: '900', color: '#3f7abe', borderBottom: '2px solid #e2e8f0', paddingBottom: '8px', marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '0.05em' },
     detailsGrid: { display: 'grid', gridTemplateColumns: '120px 1fr', gap: '12px', fontSize: '12px', marginBottom: '30px' },
     label: { color: '#64748b', fontWeight: '600' },
     value: { color: '#0f172a', fontWeight: '700' },
     table: { width: '100%', borderCollapse: 'collapse', marginTop: '10px' },
-    th: { backgroundColor: '#1e4465', color: '#ffffff', padding: '12px 15px', textAlign: 'left', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em' },
+    th: { backgroundColor: '#3f7abe', color: '#ffffff', padding: '12px 15px', textAlign: 'left', fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em' },
     td: { padding: '15px', borderBottom: '1px solid #f1f5f9', fontSize: '12px', fontWeight: '700', color: '#334155' },
     summarySection: { marginTop: '40px', maxWidth: '350px', marginLeft: 'auto' },
     summaryRow: { display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: '12px', fontWeight: '700' },
-    balanceRow: { display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', fontWeight: '900', borderTop: '2px solid #b45309', marginTop: '5px', color: '#b45309' },
-    footer: { position: 'absolute', bottom: '0', left: '0', right: '0', backgroundColor: '#1e4465', padding: '12px 40px', color: '#ffffff', textAlign: 'center', fontSize: '9px', fontWeight: '600', opacity: 0.9 },
-    stamp: { width: '80px', height: '80px', borderRadius: '50%', border: '2px dashed #1e4465', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3, margin: '20px auto 10px auto' }
+    balanceRow: { display: 'flex', justifyContent: 'space-between', padding: '12px 0', fontSize: '14px', fontWeight: '900', borderTop: '2px solid #f6871e', marginTop: '5px', color: '#f6871e' },
+    footer: { position: 'absolute', bottom: '0', left: '0', right: '0', backgroundColor: '#3f7abe', padding: '12px 40px', color: '#ffffff', textAlign: 'center', fontSize: '9px', fontWeight: '600', opacity: 0.9 },
+    stamp: { width: '80px', height: '80px', borderRadius: '50%', border: '2px dashed #3f7abe', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3, margin: '20px auto 10px auto' }
   };
 
   return (
@@ -238,8 +238,8 @@ const PaymentReceiptPage = () => {
 
            {/* Info Bar */}
            <div style={s.bar}>
-              <div style={{ display: 'flex', gap: '5px' }}>BOOKING NO: <span style={{ color: '#1e4465' }}>BK-{payment._id.slice(-6).toUpperCase()}</span></div>
-              <div style={{ display: 'flex', gap: '5px' }}>DATE: <span style={{ color: '#1e4465' }}>{new Date(payment.createdAt).toLocaleDateString('en-GB')}</span></div>
+              <div style={{ display: 'flex', gap: '5px' }}>BOOKING NO: <span style={{ color: '#3f7abe' }}>BK-{payment._id.slice(-6).toUpperCase()}</span></div>
+              <div style={{ display: 'flex', gap: '5px' }}>DATE: <span style={{ color: '#3f7abe' }}>{new Date(payment.createdAt).toLocaleDateString('en-GB')}</span></div>
               <div style={{ display: 'flex', gap: '5px' }}>STATUS: <span style={{ backgroundColor: '#dcfce7', color: '#166534', padding: '2px 8px', borderRadius: '4px' }}>CONFIRMED</span></div>
            </div>
 
@@ -264,7 +264,7 @@ const PaymentReceiptPage = () => {
                  </div>
                  <div style={{ backgroundColor: '#f8fafc', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                     <p style={{ fontSize: '9px', fontWeight: '900', color: '#64748b', textTransform: 'uppercase', marginBottom: '8px' }}>Project Summary</p>
-                    <p style={{ fontSize: '12px', fontWeight: '900', color: '#1e4465' }}>{projectSummary.systemSize} SOLAR PV SYSTEM</p>
+                    <p style={{ fontSize: '12px', fontWeight: '900', color: '#3f7abe' }}>{projectSummary.systemSize} SOLAR PV SYSTEM</p>
                     <p style={{ fontSize: '9px', fontWeight: '600', color: '#64748b', marginTop: '4px' }}>Panels: {projectSummary.solarPanels} | Inv: {projectSummary.inverter}</p>
                  </div>
               </div>
@@ -288,8 +288,8 @@ const PaymentReceiptPage = () => {
                        <td style={{ ...s.td, textAlign: 'right' }}>₹{summary.total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                     </tr>
                     <tr style={{ backgroundColor: '#f8fafc' }}>
-                       <td colSpan="3" style={{ padding: '12px 15px', textAlign: 'right', fontSize: '11px', fontWeight: '900', color: '#1e4465' }}>Total Order Amount</td>
-                       <td style={{ padding: '12px 15px', textAlign: 'right', fontSize: '12px', fontWeight: '900', color: '#1e4465' }}>₹{summary.total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                       <td colSpan="3" style={{ padding: '12px 15px', textAlign: 'right', fontSize: '11px', fontWeight: '900', color: '#3f7abe' }}>Total Order Amount</td>
+                       <td style={{ padding: '12px 15px', textAlign: 'right', fontSize: '12px', fontWeight: '900', color: '#3f7abe' }}>₹{summary.total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                     </tr>
                  </tbody>
               </table>
@@ -312,15 +312,15 @@ const PaymentReceiptPage = () => {
 
               {/* Signatory Section */}
               <div style={{ marginTop: '80px', textAlign: 'right' }}>
-                 <p style={{ fontSize: '11px', fontWeight: '900', color: '#1e4465', marginBottom: '0' }}>For ECOGRID INFRA PRIVATE LIMITED</p>
+                 <p style={{ fontSize: '11px', fontWeight: '900', color: '#3f7abe', marginBottom: '0' }}>For ECOGRID INFRA PRIVATE LIMITED</p>
                  <div style={{ margin: '15px 0' }}>
                     {sealBase64 ? (
                        <img src={sealBase64} alt="Seal" style={{ width: '100px', height: '100px', objectFit: 'contain', marginLeft: 'auto' }} />
                     ) : (
-                       <div style={{ width: '100px', height: '100px', border: '2px solid rgba(30, 68, 101, 0.2)', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0 0 0 auto', padding: '10px' }}>
-                          <div style={{ fontSize: '8px', fontWeight: '900', color: '#1e4465', opacity: 0.6, textAlign: 'center' }}>ECOGRID INFRA PVT LTD</div>
-                          <div style={{ width: '40px', height: '1px', backgroundColor: 'rgba(30, 68, 101, 0.2)', margin: '5px 0' }}></div>
-                          <div style={{ fontSize: '7px', fontWeight: '700', color: '#1e4465', opacity: 0.4 }}>CERTIFIED</div>
+                       <div style={{ width: '100px', height: '100px', border: '2px solid rgba(63, 122, 190, 0.2)', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0 0 0 auto', padding: '10px' }}>
+                          <div style={{ fontSize: '8px', fontWeight: '900', color: '#3f7abe', opacity: 0.6, textAlign: 'center' }}>ECOGRID INFRA PVT LTD</div>
+                          <div style={{ width: '40px', height: '1px', backgroundColor: 'rgba(63, 122, 190, 0.2)', margin: '5px 0' }}></div>
+                          <div style={{ fontSize: '7px', fontWeight: '700', color: '#3f7abe', opacity: 0.4 }}>CERTIFIED</div>
                        </div>
                     )}
                  </div>
