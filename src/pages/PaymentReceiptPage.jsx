@@ -284,7 +284,28 @@ const PaymentReceiptPage = () => {
                     <tr>
                        <td style={s.td}>SOLAR INSTALLATION SYSTEM PROJECT</td>
                        <td style={{ ...s.td, textAlign: 'center' }}>{payment.paymentMode?.toUpperCase() || 'CASH'}</td>
-                       <td style={{ ...s.td, textAlign: 'center' }}>{payment.referenceNo || '—'}</td>
+                       <td style={{ ...s.td, textAlign: 'center', fontSize: '10px', lineHeight: '1.3' }}>
+                          {(() => {
+                             if (payment.paymentMode === 'Cheque') {
+                                const fDate = payment.chequeDate ? new Date(payment.chequeDate).toLocaleDateString('en-GB') : '';
+                                return (
+                                   <div>
+                                      <span style={{ fontWeight: '900' }}>No:</span> {payment.referenceNo}<br/>
+                                      <span style={{ fontWeight: '900' }}>Bank:</span> {payment.bankName}<br/>
+                                      {fDate && <><span style={{ fontWeight: '900' }}>Date:</span> {fDate}</>}
+                                   </div>
+                                );
+                             } else if (payment.paymentMode === 'Bank Transfer') {
+                                return (
+                                   <div>
+                                      <span style={{ fontWeight: '900' }}>UTR:</span> {payment.referenceNo}<br/>
+                                      <span style={{ fontWeight: '900' }}>Bank:</span> {payment.bankName}
+                                   </div>
+                                );
+                             }
+                             return payment.referenceNo || '—';
+                          })()}
+                       </td>
                        <td style={{ ...s.td, textAlign: 'right' }}>₹{summary.total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                     </tr>
                     <tr style={{ backgroundColor: '#f8fafc' }}>
@@ -310,22 +331,37 @@ const PaymentReceiptPage = () => {
                  </div>
               </div>
 
-              {/* Signatory Section */}
-              <div style={{ marginTop: '80px', textAlign: 'right' }}>
-                 <p style={{ fontSize: '11px', fontWeight: '900', color: '#3f7abe', marginBottom: '0' }}>For ECOGRID INFRA PRIVATE LIMITED</p>
-                 <div style={{ margin: '15px 0' }}>
-                    {sealBase64 ? (
-                       <img src={sealBase64} alt="Seal" style={{ width: '100px', height: '100px', objectFit: 'contain', marginLeft: 'auto' }} />
-                    ) : (
-                       <div style={{ width: '100px', height: '100px', border: '2px solid rgba(63, 122, 190, 0.2)', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0 0 0 auto', padding: '10px' }}>
-                          <div style={{ fontSize: '8px', fontWeight: '900', color: '#3f7abe', opacity: 0.6, textAlign: 'center' }}>ECOGRID INFRA PVT LTD</div>
-                          <div style={{ width: '40px', height: '1px', backgroundColor: 'rgba(63, 122, 190, 0.2)', margin: '5px 0' }}></div>
-                          <div style={{ fontSize: '7px', fontWeight: '700', color: '#3f7abe', opacity: 0.4 }}>CERTIFIED</div>
-                       </div>
-                    )}
+              {/* Bottom Row: Bank Details & Signatory Section */}
+              <div style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                 <div style={{ width: '320px', textAlign: 'left' }}>
+                    <div style={{ padding: '15px', backgroundColor: '#f0f9ff', borderRadius: '12px', border: '1px solid #bae6fd' }}>
+                       <p style={{ fontSize: '8px', fontWeight: '900', color: '#0369a1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Bank Remittance</p>
+                       <p style={{ fontSize: '9px', fontWeight: '800', color: '#3f7abe', lineHeight: '1.4' }}>
+                          ECOGRID INFRA PRIVATE LIMITED<br/>
+                          Bank: Punjab National Bank<br/>
+                          A/C No: 6193002100004183 (Current)<br/>
+                          IFSC Code: PUNB0619300<br/>
+                          Branch: Vibhuti Khand, Gomti Nagar, Lucknow
+                       </p>
+                    </div>
                  </div>
-                 <div style={{ borderTop: '1px solid #cbd5e1', width: '200px', marginLeft: 'auto', marginTop: '20px' }}></div>
-                 <p style={{ fontSize: '9px', color: '#64748b', marginTop: '8px', fontWeight: '800', letterSpacing: '0.05em' }}>Authorized Signatory</p>
+                 
+                 <div style={{ textAlign: 'right' }}>
+                    <p style={{ fontSize: '11px', fontWeight: '900', color: '#3f7abe', marginBottom: '0' }}>For ECOGRID INFRA PRIVATE LIMITED</p>
+                    <div style={{ margin: '15px 0' }}>
+                       {sealBase64 ? (
+                          <img src={sealBase64} alt="Seal" style={{ width: '100px', height: '100px', objectFit: 'contain', marginLeft: 'auto' }} />
+                       ) : (
+                          <div style={{ width: '100px', height: '100px', border: '2px solid rgba(63, 122, 190, 0.2)', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '0 0 0 auto', padding: '10px' }}>
+                             <div style={{ fontSize: '8px', fontWeight: '900', color: '#3f7abe', opacity: 0.6, textAlign: 'center' }}>ECOGRID INFRA PVT LTD</div>
+                             <div style={{ width: '40px', height: '1px', backgroundColor: 'rgba(63, 122, 190, 0.2)', margin: '5px 0' }}></div>
+                             <div style={{ fontSize: '7px', fontWeight: '700', color: '#3f7abe', opacity: 0.4 }}>CERTIFIED</div>
+                          </div>
+                       )}
+                    </div>
+                    <div style={{ borderTop: '1px solid #cbd5e1', width: '200px', marginLeft: 'auto', marginTop: '20px' }}></div>
+                    <p style={{ fontSize: '9px', color: '#64748b', marginTop: '8px', fontWeight: '800', letterSpacing: '0.05em' }}>Authorized Signatory</p>
+                 </div>
               </div>
            </div>
 

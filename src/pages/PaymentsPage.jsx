@@ -56,6 +56,9 @@ const PaymentsPage = () => {
     amount: '',
     paymentMode: 'Online',
     paymentType: 'Booking Amount',
+    referenceNo: '',
+    bankName: '',
+    chequeDate: '',
     remarks: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -100,7 +103,7 @@ const PaymentsPage = () => {
       await axios.post(`${import.meta.env.VITE_API_BASE_URL}/payments`, formData, config);
       toast.success('Payment Logged Successfully!', { id: loadingToast });
       setShowAddForm(false);
-      setFormData({ leadId: '', amount: '', paymentMode: 'Online', paymentType: 'Booking Amount', remarks: '' });
+      setFormData({ leadId: '', amount: '', paymentMode: 'Online', paymentType: 'Booking Amount', referenceNo: '', bankName: '', chequeDate: '', remarks: '' });
       fetchData();
     } catch (err) {
       const msg = err.response?.data?.message || err.message;
@@ -370,10 +373,86 @@ const PaymentsPage = () => {
                   <div className="space-y-1">
                     <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Mode</label>
                     <select value={formData.paymentMode} onChange={e => setFormData({...formData, paymentMode: e.target.value})} className="input-field">
-                      <option>Online</option><option>Cash</option><option>Cheque</option>
+                      <option value="Online">Online</option>
+                      <option value="UPI">UPI Scan & Pay</option>
+                      <option value="Bank Transfer">Bank Transfer (NEFT/RTGS)</option>
+                      <option value="Cheque">Cheque</option>
+                      <option value="Cash">Cash</option>
                     </select>
                   </div>
                 </div>
+
+                {/* Conditional Fields based on Mode */}
+                {formData.paymentMode === 'UPI' && (
+                  <div className="space-y-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">UPI Transaction ID / Ref No *</label>
+                      <input type="text" required value={formData.referenceNo} onChange={e => setFormData({...formData, referenceNo: e.target.value})} placeholder="e.g. 6388908096" className="input-field bg-white" />
+                    </div>
+                    {formData.amount && Number(formData.amount) > 0 && (
+                      <div className="flex flex-col items-center justify-center p-4 bg-white rounded-xl border border-slate-100 gap-2">
+                        <p className="text-[9px] font-black text-[#3f7abe] uppercase tracking-wider text-center">Scan & Pay Dynamic QR</p>
+                        <img 
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+                            `upi://pay?pa=6388908096m@pnb&pn=ECOGRID%20INFRA%20PRIVATE%20LIMITED&am=${formData.amount}&cu=INR&tn=${encodeURIComponent(`${formData.paymentType} Ref ${formData.leadId ? formData.leadId.slice(-6).toUpperCase() : ''}`)}`
+                          )}`} 
+                          alt="Dynamic UPI QR" 
+                          className="w-36 h-36 border border-slate-100 rounded-lg" 
+                        />
+                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center mt-1">UPI ID: 6388908096m@pnb</p>
+                        <p className="text-[9px] font-black text-emerald-600 uppercase tracking-widest text-center">Payee: ECOGRID INFRA PRIVATE LIMITED</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {formData.paymentMode === 'Bank Transfer' && (
+                  <div className="space-y-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">UTR / Ref No *</label>
+                        <input type="text" required value={formData.referenceNo} onChange={e => setFormData({...formData, referenceNo: e.target.value})} placeholder="e.g. UTR / Ref ID" className="input-field bg-white" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Remitting Bank Name *</label>
+                        <input type="text" required value={formData.bankName} onChange={e => setFormData({...formData, bankName: e.target.value})} placeholder="e.g. HDFC, SBI" className="input-field bg-white" />
+                      </div>
+                    </div>
+                    <div className="p-4 bg-white rounded-xl border border-slate-100 space-y-1 text-xs">
+                      <p className="text-[9px] font-black text-[#3f7abe] uppercase tracking-wider mb-2">PNB Current Account Details</p>
+                      <p className="font-bold text-slate-700">Name: <span className="text-slate-900 font-extrabold">ECOGRID INFRA PRIVATE LIMITED</span></p>
+                      <p className="font-bold text-slate-700">A/c No: <span className="text-slate-900 font-extrabold">6193002100004183</span></p>
+                      <p className="font-bold text-slate-700">IFSC: <span className="text-slate-900 font-extrabold">PUNB0619300</span></p>
+                      <p className="font-bold text-slate-700">Branch: <span className="text-slate-900 font-extrabold">Vibhuti Khand, Gomti Nagar, Lucknow</span></p>
+                    </div>
+                  </div>
+                )}
+
+                {formData.paymentMode === 'Cheque' && (
+                  <div className="space-y-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Cheque Number *</label>
+                        <input type="text" required value={formData.referenceNo} onChange={e => setFormData({...formData, referenceNo: e.target.value})} placeholder="e.g. 691244" className="input-field bg-white" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Remitting Bank Name *</label>
+                        <input type="text" required value={formData.bankName} onChange={e => setFormData({...formData, bankName: e.target.value})} placeholder="e.g. PNB, SBI" className="input-field bg-white" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Cheque Date *</label>
+                      <input type="date" required value={formData.chequeDate} onChange={e => setFormData({...formData, chequeDate: e.target.value})} className="input-field bg-white" />
+                    </div>
+                  </div>
+                )}
+
+                {formData.paymentMode === 'Online' && (
+                  <div className="space-y-1 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Transaction Ref / ID (Optional)</label>
+                    <input type="text" value={formData.referenceNo} onChange={e => setFormData({...formData, referenceNo: e.target.value})} placeholder="e.g. txn_12345" className="input-field" />
+                  </div>
+                )}
                 <div className="space-y-1">
                   <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest ml-1">Internal Remarks</label>
                   <input type="text" value={formData.remarks} onChange={e => setFormData({...formData, remarks: e.target.value})} className="input-field" />

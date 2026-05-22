@@ -221,15 +221,35 @@ const FormalInvoicePage = () => {
            </div>
 
            <div style={s.summarySection}>
-              <div style={{ width: '300px' }}>
-                 <p style={{ fontSize: '9px', fontWeight: '900', color: '#64748b', textTransform: 'uppercase', marginBottom: '10px' }}>Amount in Words</p>
-                 <p style={{ fontSize: '10px', fontWeight: '700', color: '#3f7abe', fontStyle: 'italic', lineHeight: '1.4' }}>Rupees {numberToWords(netAmt)} Only</p>
-                 
-                 <div style={{ marginTop: '25px', padding: '15px', backgroundColor: '#f0f9ff', borderRadius: '12px', border: '1px solid #bae6fd' }}>
-                    <p style={{ fontSize: '8px', fontWeight: '900', color: '#0369a1', marginBottom: '6px', textTransform: 'uppercase' }}>Bank Remittance</p>
-                    <p style={{ fontSize: '9px', fontWeight: '800', color: '#3f7abe' }}>ECOGRID INFRA PVT LTD<br/>PNB | A/C: 6193002100004183<br/>IFSC: PUNB0619300</p>
-                 </div>
-              </div>
+               <div style={{ width: '380px' }}>
+                  <p style={{ fontSize: '9px', fontWeight: '900', color: '#64748b', textTransform: 'uppercase', marginBottom: '10px' }}>Amount in Words</p>
+                  <p style={{ fontSize: '10px', fontWeight: '700', color: '#3f7abe', fontStyle: 'italic', lineHeight: '1.4' }}>Rupees {numberToWords(netAmt)} Only</p>
+                  
+                  <div style={{ marginTop: '20px', display: 'flex', gap: '15px' }}>
+                     <div style={{ flex: '1', padding: '15px', backgroundColor: '#f0f9ff', borderRadius: '12px', border: '1px solid #bae6fd' }}>
+                        <p style={{ fontSize: '8px', fontWeight: '900', color: '#0369a1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Bank Remittance</p>
+                        <p style={{ fontSize: '9px', fontWeight: '800', color: '#3f7abe', lineHeight: '1.4' }}>
+                           ECOGRID INFRA PRIVATE LIMITED<br/>
+                           Bank: Punjab National Bank<br/>
+                           A/C No: 6193002100004183 (Current)<br/>
+                           IFSC Code: PUNB0619300<br/>
+                           Branch: Vibhuti Khand, Lucknow
+                        </p>
+                     </div>
+                     
+                     <div style={{ width: '120px', padding: '10px', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <p style={{ fontSize: '7px', fontWeight: '900', color: '#3f7abe', textTransform: 'uppercase', marginBottom: '5px', textAlign: 'center', letterSpacing: '0.02em' }}>Scan & Pay (UPI)</p>
+                        <img 
+                           src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(
+                              `upi://pay?pa=6388908096m@pnb&pn=ECOGRID%20INFRA%20PRIVATE%20LIMITED&am=${netAmt}&cu=INR&tn=${encodeURIComponent(`Invoice ${invoice.invoiceNo || ''}`)}`
+                           )}`} 
+                           alt="Invoice UPI QR" 
+                           style={{ width: '70px', height: '70px' }} 
+                        />
+                        <p style={{ fontSize: '6px', fontWeight: '700', color: '#64748b', marginTop: '4px', textAlign: 'center' }}>6388908096m@pnb</p>
+                     </div>
+                  </div>
+               </div>
               
               <div style={s.totalBox}>
                  {showGst && (
