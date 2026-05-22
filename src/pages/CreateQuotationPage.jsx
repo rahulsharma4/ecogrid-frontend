@@ -20,6 +20,19 @@ import {
   CreditCard
 } from 'lucide-react';
 
+const calculateEmi = (principal, annualRate, tenureMonths) => {
+  const p = Number(principal) || 0;
+  const rate = Number(annualRate) || 0;
+  const n = Number(tenureMonths) || 0;
+  
+  if (p <= 0 || n <= 0) return '';
+  if (rate <= 0) return Math.round(p / n).toString();
+  
+  const monthlyRate = rate / 12 / 100;
+  const emi = (p * monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1);
+  return Math.round(emi).toString();
+};
+
 const CreateQuotationPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -132,7 +145,33 @@ const CreateQuotationPage = () => {
       netPrice: net,
       netEffectivePrice: effective
     });
-  }, [formData]);
+  }, [
+    formData.baseAmount,
+    formData.earlyBirdDiscount,
+    formData.additionalDiscount,
+    formData.includeGST,
+    formData.gstPercentage
+  ]);
+
+  // Recalculate Down Payment when Net Price changes
+  useEffect(() => {
+    if (formData.loanDetails.required) {
+      const loanAmt = Number(formData.loanDetails.loanAmount) || 0;
+      const netVal = calculations.netPrice || 0;
+      if (loanAmt > 0 && netVal > 0) {
+        const calculatedDownPayment = Math.max(0, Math.round(netVal - loanAmt)).toString();
+        if (calculatedDownPayment !== formData.loanDetails.downPayment) {
+          setFormData(prev => ({
+            ...prev,
+            loanDetails: {
+              ...prev.loanDetails,
+              downPayment: calculatedDownPayment
+            }
+          }));
+        }
+      }
+    }
+  }, [calculations.netPrice, formData.loanDetails.required]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -783,16 +822,88 @@ const CreateQuotationPage = () => {
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Loan Amount (₹)</label>
-                  <input type="number" value={formData.loanDetails.loanAmount} onChange={e => setFormData({ ...formData, loanDetails: { ...formData.loanDetails, loanAmount: e.target.value } })} placeholder="0.00" className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-emerald-500 transition-all" />
+                  <input
+                    type="number"
+                    value={formData.loanDetails.loanAmount}
+                    onChange={e => {
+                      const newLoanAmt = e.target.value;
+                      const tenure = formData.loanDetails.tenureMonths;
+                      const rate = formData.loanDetails.interestRate;
+                      let calculatedEmi = formData.loanDetails.emiAmount;
+                      if (Number(newLoanAmt) > 0 && Number(tenure) > 0) {
+                        calculatedEmi = calculateEmi(newLoanAmt, rate, tenure);
+                      }
+                      let calculatedDownPayment = formData.loanDetails.downPayment;
+                      if (calculations.netPrice > 0 && Number(newLoanAmt) > 0) {
+                        calculatedDownPayment = Math.max(0, Math.round(calculations.netPrice - Number(newLoanAmt))).toString();
+                      }
+                      setFormData({
+                        ...formData,
+                        loanDetails: {
+                          ...formData.loanDetails,
+                          loanAmount: newLoanAmt,
+                          emiAmount: calculatedEmi,
+                          downPayment: calculatedDownPayment
+                        }
+                      });
+                    }}
+                    placeholder="0.00"
+                    className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-emerald-500 transition-all"
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Tenure (Months)</label>
-                    <input type="number" value={formData.loanDetails.tenureMonths} onChange={e => setFormData({ ...formData, loanDetails: { ...formData.loanDetails, tenureMonths: e.target.value } })} placeholder="e.g. 60" className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-emerald-500 transition-all" />
+                    <input
+                      type="number"
+                      value={formData.loanDetails.tenureMonths}
+                      onChange={e => {
+                        const newTenure = e.target.value;
+                        const loanAmt = formData.loanDetails.loanAmount;
+                        const rate = formData.loanDetails.interestRate;
+                        let calculatedEmi = formData.loanDetails.emiAmount;
+                        if (Number(loanAmt) > 0 && Number(newTenure) > 0) {
+                          calculatedEmi = calculateEmi(loanAmt, rate, newTenure);
+                        }
+                        setFormData({
+                          ...formData,
+                          loanDetails: {
+                            ...formData.loanDetails,
+                            tenureMonths: newTenure,
+                            emiAmount: calculatedEmi
+                          }
+                        });
+                      }}
+                      placeholder="e.g. 60"
+                      className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-emerald-500 transition-all"
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Interest Rate (%)</label>
-                    <input type="number" step="0.01" value={formData.loanDetails.interestRate} onChange={e => setFormData({ ...formData, loanDetails: { ...formData.loanDetails, interestRate: e.target.value } })} placeholder="8.5" className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-emerald-500 transition-all" />
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={formData.loanDetails.interestRate}
+                      onChange={e => {
+                        const newRate = e.target.value;
+                        const loanAmt = formData.loanDetails.loanAmount;
+                        const tenure = formData.loanDetails.tenureMonths;
+                        let calculatedEmi = formData.loanDetails.emiAmount;
+                        if (Number(loanAmt) > 0 && Number(tenure) > 0) {
+                          calculatedEmi = calculateEmi(loanAmt, newRate, tenure);
+                        }
+                        setFormData({
+                          ...formData,
+                          loanDetails: {
+                            ...formData.loanDetails,
+                            interestRate: newRate,
+                            emiAmount: calculatedEmi
+                          }
+                        });
+                      }}
+                      placeholder="8.5"
+                      className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-emerald-500 transition-all"
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -805,7 +916,35 @@ const CreateQuotationPage = () => {
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Down Payment (₹)</label>
-                  <input type="number" value={formData.loanDetails.downPayment} onChange={e => setFormData({ ...formData, loanDetails: { ...formData.loanDetails, downPayment: e.target.value } })} placeholder="Paid to Bank" className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-emerald-500 transition-all" />
+                  <input
+                    type="number"
+                    value={formData.loanDetails.downPayment}
+                    onChange={e => {
+                      const newDownPayment = e.target.value;
+                      const netVal = calculations.netPrice || 0;
+                      let calculatedLoanAmt = formData.loanDetails.loanAmount;
+                      let calculatedEmi = formData.loanDetails.emiAmount;
+                      if (netVal > 0 && Number(newDownPayment) >= 0) {
+                        calculatedLoanAmt = Math.max(0, Math.round(netVal - Number(newDownPayment))).toString();
+                        const tenure = formData.loanDetails.tenureMonths;
+                        const rate = formData.loanDetails.interestRate;
+                        if (Number(calculatedLoanAmt) > 0 && Number(tenure) > 0) {
+                          calculatedEmi = calculateEmi(calculatedLoanAmt, rate, tenure);
+                        }
+                      }
+                      setFormData({
+                        ...formData,
+                        loanDetails: {
+                          ...formData.loanDetails,
+                          downPayment: newDownPayment,
+                          loanAmount: calculatedLoanAmt,
+                          emiAmount: calculatedEmi
+                        }
+                      });
+                    }}
+                    placeholder="Paid to Bank"
+                    className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-emerald-500 transition-all"
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Loan Remarks</label>
