@@ -67,13 +67,13 @@ const ConsultantsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const loadingToast = toast.loading('Adding consultant...');
+    const loadingToast = toast.loading('Adding staff member...');
     setIsSubmitting(true);
 
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       const { data: newUser } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/staff`, formData, config);
-      toast.success('Consultant Added!', { id: loadingToast });
+      toast.success('Staff Member Added!', { id: loadingToast });
       setShowAddForm(false);
       setFormData({ name: '', email: '', phone: '', password: '', role: 'staff' });
       
@@ -81,7 +81,7 @@ const ConsultantsPage = () => {
       setStaff(prev => [newUser, ...prev]);
     } catch (err) {
       const msg = err.response?.data?.message || err.message;
-      toast.error('Failed to add consultant: ' + msg, { id: loadingToast });
+      toast.error('Failed to add staff member: ' + msg, { id: loadingToast });
     } finally {
       setIsSubmitting(false);
     }
@@ -90,20 +90,20 @@ const ConsultantsPage = () => {
   const deleteStaff = async (id) => {
     setModalConfig({
       isOpen: true,
-      title: 'Delete Consultant?',
-      message: 'This action will revoke all access for this consultant immediately. Are you sure you want to proceed?',
+      title: 'Delete Staff Member?',
+      message: 'This action will revoke all access for this staff member immediately. Are you sure you want to proceed?',
       type: 'danger',
       confirmText: 'Delete Member',
       onConfirm: async () => {
-        const loadingToast = toast.loading('Removing consultant...');
+        const loadingToast = toast.loading('Removing staff member...');
         try {
           const config = { headers: { Authorization: `Bearer ${user.token}` } };
           await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/staff/${id}`, config);
-          toast.success('Consultant Removed', { id: loadingToast });
+          toast.success('Staff Member Removed', { id: loadingToast });
           fetchStaff();
         } catch (err) {
           const msg = err.response?.data?.message || err.message;
-          toast.error('Failed to delete consultant: ' + msg, { id: loadingToast });
+          toast.error('Failed to delete staff member: ' + msg, { id: loadingToast });
         }
       }
     });
@@ -113,7 +113,7 @@ const ConsultantsPage = () => {
     const isBlocking = currentStatus === 'active';
     setModalConfig({
       isOpen: true,
-      title: isBlocking ? 'Block Consultant?' : 'Unblock Consultant?',
+      title: isBlocking ? 'Block Staff Member?' : 'Unblock Staff Member?',
       message: isBlocking 
         ? 'This user will be blocked immediately and logged out of any active sessions. Are you sure?'
         : 'This user will be unblocked and will be able to log back into their account. Are you sure?',
@@ -121,7 +121,7 @@ const ConsultantsPage = () => {
       confirmText: isBlocking ? 'Block Member' : 'Unblock Member',
       onConfirm: async () => {
         const actionText = isBlocking ? 'Blocking' : 'Unblocking';
-        const loadingToast = toast.loading(`${actionText} consultant...`);
+        const loadingToast = toast.loading(`${actionText} staff member...`);
         try {
           const config = { headers: { Authorization: `Bearer ${user.token}` } };
           const { data } = await axios.patch(
@@ -130,7 +130,7 @@ const ConsultantsPage = () => {
             config
           );
           
-          toast.success(`Consultant successfully ${data.status === 'active' ? 'unblocked' : 'blocked'}!`, { id: loadingToast });
+          toast.success(`Staff member successfully ${data.status === 'active' ? 'unblocked' : 'blocked'}!`, { id: loadingToast });
           
           // Update local state instead of full re-fetch for instant UI feedback
           setStaff(prev => prev.map(member => 
@@ -153,7 +153,7 @@ const ConsultantsPage = () => {
   if (loading) return (
     <div className="flex flex-col items-center justify-center h-64 gap-4">
       <Loader2 className="w-8 h-8 text-[#3f7abe] animate-spin" />
-      <p className="text-xs font-black text-slate-600 uppercase tracking-widest">Loading Consultants...</p>
+      <p className="text-xs font-black text-slate-600 uppercase tracking-widest">Loading Staff Registry...</p>
     </div>
   );
 
@@ -161,12 +161,12 @@ const ConsultantsPage = () => {
     <div className="space-y-6 lg:space-y-8 animate-in fade-in duration-500 pb-20">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Consultants Registry</h1>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Staff Registry</h1>
           <p className="text-slate-600 text-sm font-bold">Access Control & Team Management</p>
         </div>
         <button onClick={() => setShowAddForm(true)} className="btn-secondary self-start md:self-center">
           <UserPlus className="w-5 h-5" />
-          Add Consultant
+          Add Staff Member
         </button>
       </div>
 
@@ -192,7 +192,7 @@ const ConsultantsPage = () => {
         {filteredStaff.map((member) => (
           <div 
             key={member._id} 
-            onClick={() => navigate(`/dashboard/consultants/${member._id}`)}
+            onClick={() => navigate(`/dashboard/staff/${member._id}`)}
             className="glass-card hover:border-[#3f7abe]/20 group relative overflow-hidden flex flex-col transition-all cursor-pointer hover:shadow-xl hover:-translate-y-1 active:scale-95"
           >
             <div className={`absolute top-0 left-0 w-full h-1 ${member.role === 'admin' ? 'bg-[#3f7abe]' : 'bg-slate-200'}`}></div>
@@ -266,7 +266,7 @@ const ConsultantsPage = () => {
       {filteredStaff.length === 0 && (
         <div className="text-center py-20 glass-card">
            <Users className="w-12 h-12 text-slate-200 mx-auto mb-4" />
-           <h2 className="text-xl font-bold text-slate-800">No consultants found</h2>
+           <h2 className="text-xl font-bold text-slate-800">No staff members found</h2>
            <p className="text-slate-600 text-sm mt-1 font-bold uppercase tracking-widest">Adjust your search criteria</p>
         </div>
       )}
@@ -276,7 +276,7 @@ const ConsultantsPage = () => {
           <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-xl overflow-hidden my-auto animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-slate-100 bg-[#3f7abe]/5 flex items-center justify-between">
                <div>
-                  <h2 className="text-2xl font-black text-[#3f7abe]">Add Consultant</h2>
+                  <h2 className="text-2xl font-black text-[#3f7abe]">Add Staff Member</h2>
                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Access Credentials</p>
                </div>
                <button onClick={() => { setShowAddForm(false); setShowPassword(false); }} className="p-2 hover:bg-slate-50 rounded-lg transition-all text-slate-500">

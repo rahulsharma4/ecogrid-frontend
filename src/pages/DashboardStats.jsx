@@ -235,7 +235,7 @@ const DashboardStats = () => {
       icon: Users, 
       color: 'text-orange-700', 
       bg: 'bg-orange-50', 
-      path: '/dashboard/consultants',
+      path: '/dashboard/staff',
       desc: 'Field operatives'
     },
     { 

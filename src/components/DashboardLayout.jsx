@@ -59,7 +59,7 @@ const DashboardLayout = ({ children }) => {
 
   const navItems = [
     { name: 'Home', path: '/dashboard/stats', icon: LayoutDashboard, roles: ['admin', 'staff', 'telecaller'] },
-    { name: 'Consultants', path: '/dashboard/consultants', icon: Users, roles: ['admin'] },
+    { name: 'Staff', path: '/dashboard/staff', icon: Users, roles: ['admin'] },
     { name: user?.role === 'telecaller' ? 'My Contacts' : 'Contacts', path: '/dashboard/contacts', icon: BookOpen, roles: ['admin', 'telecaller'] },
     { name: 'Leads', path: '/dashboard/leads', icon: UserSquare2, roles: ['admin', 'staff'] },
     { name: 'Quotations', path: '/dashboard/quotations', icon: FileText, roles: ['admin', 'staff'] },

@@ -76,8 +76,8 @@ function App() {
                     <Route path="quotations/view/:id" element={<QuotationViewPage />} />
                     <Route path="invoices" element={<InvoicesPage />} />
                     <Route path="invoices/view/:id" element={<FormalInvoicePage />} />
-                    <Route path="consultants" element={<AdminRoute><ConsultantsPage /></AdminRoute>} />
-                    <Route path="consultants/:id" element={<AdminRoute><ConsultantDetailPage /></AdminRoute>} />
+                    <Route path="staff" element={<AdminRoute><ConsultantsPage /></AdminRoute>} />
+                    <Route path="staff/:id" element={<AdminRoute><ConsultantDetailPage /></AdminRoute>} />
                     <Route path="contacts" element={<ContactsPage />} />
                     <Route path="contacts/:id" element={<ContactDetailPage />} />
                     <Route path="payments" element={<PaymentsPage />} />
