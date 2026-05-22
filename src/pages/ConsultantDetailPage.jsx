@@ -61,14 +61,14 @@ const ConsultantDetailPage = () => {
   if (loading) return (
     <div className="flex flex-col items-center justify-center h-screen gap-4">
       <Loader2 className="w-10 h-10 text-[#3f7abe] animate-spin" />
-      <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Loading Staff Intel...</p>
+      <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Loading Consultant Intel...</p>
     </div>
   );
 
   if (!data) return (
     <div className="flex flex-col items-center justify-center h-screen gap-6">
       <AlertCircle className="w-16 h-16 text-red-500 opacity-20" />
-      <h2 className="text-2xl font-black text-slate-900">Staff Member Not Found</h2>
+      <h2 className="text-2xl font-black text-slate-900">Consultant Not Found</h2>
       <button onClick={() => navigate(-1)} className="btn-secondary">Go Back</button>
     </div>
   );
@@ -110,8 +110,8 @@ const ConsultantDetailPage = () => {
           <ChevronLeft className="w-6 h-6 text-slate-600 group-hover:-translate-x-1 transition-transform" />
         </button>
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Staff Dossier</h1>
-          <p className="text-slate-500 text-sm font-bold uppercase tracking-widest">Staff Member: {staff.name}</p>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Consultant Dossier</h1>
+          <p className="text-slate-500 text-sm font-bold uppercase tracking-widest">Consultant: {staff.name}</p>
         </div>
       </div>
 
