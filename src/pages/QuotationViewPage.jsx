@@ -694,10 +694,24 @@ const QuotationViewPage = () => {
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.solarPanelsQty || 'As per capacity'}</td>
                 </tr>
                 <tr>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Inverter (On-Grid)<br/>10 / 7 Year Warranty</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Inverter<br/>10 / 7 Year Warranty</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.inverter}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.inverterMake || 'Solis'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.inverterQty || '1 Unit'}</td>
+                </tr>
+                <tr>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Inverter Hybrid</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.inverterHybrid || 'No'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>—</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>—</td>
+                </tr>
+                <tr>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Battery Backup</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>
+                    {quotation.battery === 'Yes' ? `Yes (${quotation.batteryRemark || 'Required'})` : 'No'}
+                  </td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.battery === 'Yes' ? 'Approved Make' : '—'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.battery === 'Yes' ? '1 Set' : '—'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Solar panel<br/>mounting structure</td>
