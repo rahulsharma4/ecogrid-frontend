@@ -79,6 +79,9 @@ const CreateQuotationPage = () => {
     cleaningFrequency: 'NO',
     floorHeight: 'G+0',
     inverterLocation: 'Ground',
+    inverterHybrid: 'No',
+    battery: 'No',
+    batteryRemark: '',
     baseAmount: '',
     earlyBirdDiscount: '',
     additionalDiscount: '',
@@ -392,6 +395,33 @@ const CreateQuotationPage = () => {
                 <div className="space-y-2">
                   <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Floor Height</label>
                   <input type="text" value={formData.floorHeight} onChange={e => setFormData({ ...formData, floorHeight: e.target.value })} className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-[#f6871e] transition-all" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 col-span-1 md:col-span-2 bg-[#3f7abe]/5 p-6 rounded-[2rem] border border-[#3f7abe]/10">
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black text-[#3f7abe] uppercase tracking-widest ml-1">Inverter Hybrid</label>
+                  <div className="relative">
+                    <select value={formData.inverterHybrid} onChange={e => setFormData({ ...formData, inverterHybrid: e.target.value })} className="w-full px-6 py-4.5 bg-white border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:border-[#f6871e] transition-all appearance-none cursor-pointer">
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                    <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black text-[#3f7abe] uppercase tracking-widest ml-1">Battery Option</label>
+                  <div className="relative">
+                    <select value={formData.battery} onChange={e => setFormData({ ...formData, battery: e.target.value })} className="w-full px-6 py-4.5 bg-white border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:border-[#f6871e] transition-all appearance-none cursor-pointer">
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                    <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-black text-[#3f7abe] uppercase tracking-widest ml-1">Battery Remark</label>
+                  <input type="text" value={formData.batteryRemark} onChange={e => setFormData({ ...formData, batteryRemark: e.target.value })} placeholder={formData.battery === 'Yes' ? "e.g. 5kW Battery Pack" : "No battery required"} disabled={formData.battery !== 'Yes'} className="w-full px-6 py-4.5 bg-white border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:border-[#f6871e] transition-all disabled:opacity-50" />
                 </div>
               </div>
 

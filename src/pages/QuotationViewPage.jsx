@@ -873,53 +873,89 @@ const QuotationViewPage = () => {
             </div>
           </div>
 
-          {/* Bottom Card Block: Theme Orange card */}
+          {/* Bottom Card Block: Contact Details & WhatsApp QR Side-by-Side */}
           <div style={{
-            background: '#f6871e',
-            color: 'white',
-            margin: '0 25px 25px 25px',
-            borderRadius: '24px',
-            padding: '24px 20px',
-            boxShadow: '0 8px 25px rgba(246,135,30,0.25)',
             display: 'flex',
-            flexDirection: 'column',
-            gap: '14px'
+            gap: '20px',
+            margin: '0 25px 25px 25px',
+            alignItems: 'stretch'
           }}>
-            {/* Phone Info */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.2)', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Phone size={16} color="white" />
+            {/* Left Column: Orange card */}
+            <div style={{
+              flex: '1.4',
+              background: '#f6871e',
+              color: 'white',
+              borderRadius: '24px',
+              padding: '24px 20px',
+              boxShadow: '0 8px 25px rgba(246,135,30,0.2)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '14px'
+            }}>
+              {/* Phone Info */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.2)', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Phone size={16} color="white" />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 'bold' }}>+91 9889555339</span>
+                  <span style={{ fontSize: '13px', fontWeight: 'bold' }}>+91 6388908096</span>
+                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '14px', fontWeight: 'bold' }}>+91 9889555339</span>
-                <span style={{ fontSize: '14px', fontWeight: 'bold' }}>+91 6388908096</span>
+
+              {/* Website Info */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.2)', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Globe size={16} color="white" />
+                </div>
+                <span style={{ fontSize: '13px', fontWeight: 'bold' }}>www.solarecogrid.in</span>
+              </div>
+
+              {/* Email Info */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.2)', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Mail size={16} color="white" />
+                </div>
+                <span style={{ fontSize: '13px', fontWeight: 'bold' }}>infosecogridinfra.in</span>
+              </div>
+
+              {/* Address Info */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+                <div style={{ background: 'rgba(255,255,255,0.2)', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '2px', flexShrink: 0 }}>
+                  <MapPin size={16} color="white" />
+                </div>
+                <span style={{ fontSize: '12px', fontWeight: 'bold', lineHeight: '1.4' }}>
+                  D-352, Vibhuti khand, Gomti Nagar Lucknow, 226010
+                </span>
               </div>
             </div>
 
-            {/* Website Info */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.2)', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Globe size={16} color="white" />
+            {/* Right Column: WhatsApp QR Card */}
+            <div style={{
+              flex: '1',
+              background: '#ffffff',
+              borderRadius: '24px',
+              padding: '20px',
+              border: '2px solid #f1f5f9',
+              boxShadow: '0 8px 25px rgba(0,0,0,0.03)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              textAlign: 'center'
+            }}>
+              <p style={{ fontSize: '10px', fontWeight: '900', color: '#16a34a', textTransform: 'uppercase', margin: 0, letterSpacing: '0.05em' }}>Scan to Chat</p>
+              <div style={{ background: '#dcfce7', borderRadius: '12px', padding: '6px 12px', fontSize: '9px', fontWeight: '800', color: '#166534', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <Zap size={10} fill="#16a34a" color="#16a34a" /> WhatsApp Contact
               </div>
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>www.solarecogrid.in</span>
-            </div>
-
-            {/* Email Info */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.2)', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Mail size={16} color="white" />
-              </div>
-              <span style={{ fontSize: '14px', fontWeight: 'bold' }}>infosecogridinfra.in</span>
-            </div>
-
-            {/* Address Info */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.2)', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '2px', flexShrink: 0 }}>
-                <MapPin size={16} color="white" />
-              </div>
-              <span style={{ fontSize: '13px', fontWeight: 'bold', lineHeight: '1.4' }}>
-                D-352, Vibhuti khand, Gomti Nagar Lucknow, 226010
-              </span>
+              <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent('https://wa.me/916388908096')}`}
+                alt="WhatsApp QR Code" 
+                style={{ width: '105px', height: '105px', display: 'block', borderRadius: '8px' }} 
+              />
+              <p style={{ fontSize: '9px', fontWeight: '800', color: '#64748b', margin: 0 }}>+91 6388908096</p>
             </div>
           </div>
         </div>
