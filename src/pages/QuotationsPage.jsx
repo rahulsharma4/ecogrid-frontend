@@ -280,40 +280,48 @@ const QuotationsPage = () => {
                 </div>
                 <div className="flex items-center gap-2">
                    {q.status === 'Pending' && (
-                     <button 
-                        onClick={() => {
-                          setModalConfig({
-                            isOpen: true,
-                            title: 'Generate Invoice?',
-                            message: `Convert Proposal ${q.quotationNo} into a formal tax invoice?`,
-                            onConfirm: async () => {
-                              const loadingToast = toast.loading('Generating Tax Invoice...');
-                              try {
-                                const config = { headers: { Authorization: `Bearer ${user.token}` } };
-                                await axios.post(`${import.meta.env.VITE_API_BASE_URL}/invoices`, {
-                                  leadId: q.lead?._id,
-                                  quotationId: q._id,
-                                  systemSize: q.systemSize,
-                                  solarPanels: q.solarPanels,
-                                  inverter: q.inverter,
-                                  baseAmount: q.isGstInclusive ? q.netPrice : (q.netPrice - q.gstAmount),
-                                  gstPercentage: q.gstPercentage,
-                                  isGstInclusive: !!q.isGstInclusive,
-                                  amountPaid: 0
-                                }, config);
-                                toast.success('Invoice Generated!', { id: loadingToast });
-                                fetchQuotations();
-                              } catch (err) {
-                                const msg = err.response?.data?.message || err.message;
-                                toast.error('Failed: ' + msg, { id: loadingToast });
-                              }
-                            }
-                          });
-                        }}
-                       className="py-1.5 px-3 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-emerald-100 font-black text-[8px] uppercase tracking-widest"
-                     >
-                        Invoice
-                     </button>
+                      <>
+                        <button 
+                          onClick={() => navigate(`/dashboard/quotations/edit/${q._id}`)}
+                          className="py-1.5 px-3 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-600 hover:text-white transition-all shadow-sm border border-amber-100 font-black text-[8px] uppercase tracking-widest"
+                        >
+                           Edit
+                        </button>
+                        <button 
+                           onClick={() => {
+                             setModalConfig({
+                               isOpen: true,
+                               title: 'Generate Invoice?',
+                               message: `Convert Proposal ${q.quotationNo} into a formal tax invoice?`,
+                               onConfirm: async () => {
+                                 const loadingToast = toast.loading('Generating Tax Invoice...');
+                                 try {
+                                   const config = { headers: { Authorization: `Bearer ${user.token}` } };
+                                   await axios.post(`${import.meta.env.VITE_API_BASE_URL}/invoices`, {
+                                     leadId: q.lead?._id,
+                                     quotationId: q._id,
+                                     systemSize: q.systemSize,
+                                     solarPanels: q.solarPanels,
+                                     inverter: q.inverter,
+                                     baseAmount: q.isGstInclusive ? q.netPrice : (q.netPrice - q.gstAmount),
+                                     gstPercentage: q.gstPercentage,
+                                     isGstInclusive: !!q.isGstInclusive,
+                                     amountPaid: 0
+                                   }, config);
+                                   toast.success('Invoice Generated!', { id: loadingToast });
+                                   fetchQuotations();
+                                 } catch (err) {
+                                   const msg = err.response?.data?.message || err.message;
+                                   toast.error('Failed: ' + msg, { id: loadingToast });
+                                 }
+                               }
+                             });
+                           }}
+                          className="py-1.5 px-3 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-emerald-100 font-black text-[8px] uppercase tracking-widest"
+                        >
+                           Invoice
+                        </button>
+                      </>
                    )}
                    <button 
                      onClick={() => handleDownload(q._id)}

@@ -73,6 +73,7 @@ function App() {
                     <Route path="leads/:id/history" element={<LeadHistoryPage />} />
                     <Route path="quotations" element={<QuotationsPage />} />
                     <Route path="quotations/create" element={<CreateQuotationPage />} />
+                    <Route path="quotations/edit/:id" element={<CreateQuotationPage />} />
                     <Route path="quotations/view/:id" element={<QuotationViewPage />} />
                     <Route path="invoices" element={<InvoicesPage />} />
                     <Route path="invoices/view/:id" element={<FormalInvoicePage />} />

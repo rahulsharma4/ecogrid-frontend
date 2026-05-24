@@ -175,10 +175,20 @@ const QuotationViewPage = () => {
         <button onClick={() => navigate('/dashboard/quotations')} className="p-3 bg-white border border-slate-200 rounded-2xl shadow-sm hover:bg-slate-50 transition-all text-slate-500">
           <ArrowLeft className="w-6 h-6" />
         </button>
-        <button disabled={isDownloading} onClick={handleDownload} className="flex items-center gap-2 px-10 py-5 bg-[#3f7abe] hover:bg-[#33629c] text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-[#3f7abe]/30 transition-all">
-          {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileDown className="w-4 h-4" />}
-          {isDownloading ? 'Downloading...' : 'Download Full Proposal'}
-        </button>
+        <div className="flex items-center gap-3">
+          {quotation?.status === 'Pending' && (
+            <button 
+              onClick={() => navigate(`/dashboard/quotations/edit/${quotation._id}`)} 
+              className="flex items-center gap-2 px-6 py-5 bg-amber-50 hover:bg-amber-600 hover:text-white border border-amber-200 text-amber-600 rounded-2xl font-black text-xs uppercase tracking-widest transition-all animate-in fade-in zoom-in-95 duration-200"
+            >
+              Edit Proposal
+            </button>
+          )}
+          <button disabled={isDownloading} onClick={handleDownload} className="flex items-center gap-2 px-10 py-5 bg-[#3f7abe] hover:bg-[#33629c] text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-[#3f7abe]/30 transition-all">
+            {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileDown className="w-4 h-4" />}
+            {isDownloading ? 'Downloading...' : 'Download Full Proposal'}
+          </button>
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center' }}>
@@ -690,24 +700,24 @@ const QuotationViewPage = () => {
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Solar Panels<br/>30 Year Performance<br/>Warranty</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.solarPanels}</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.solarPanelsMake || 'Adani/Luminous'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.solarPanelsMake || 'Adani/Luminous'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.solarPanelsQty || 'As per capacity'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Inverter<br/>10 / 7 Year Warranty</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.inverter}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.inverter}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.inverterMake || 'Solis'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.inverterQty || '1 Unit'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Inverter Hybrid</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.inverterHybrid || 'No'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.inverterHybrid || 'No'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>—</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>—</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Battery Backup</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>
                     {quotation.battery === 'Yes' ? `Yes (${quotation.batteryRemark || 'Required'})` : 'No'}
                   </td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.battery === 'Yes' ? 'Approved Make' : '—'}</td>
@@ -721,43 +731,43 @@ const QuotationViewPage = () => {
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>ACDB (AC Distribution<br/>Box)</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.acdbDetails || 'For Safe AC Distribution, IP65'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.acdbDetails || 'For Safe AC Distribution, IP65'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.acdbMake || 'Polycab'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.acdbQty || '1 Unit'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>DCDB (DC Distribution<br/>Box)</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.dcdbDetails || 'For Safe DC Distribution, IP65'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.dcdbDetails || 'For Safe DC Distribution, IP65'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.dcdbMake || 'Polycab'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.dcdbQty || '1 Unit'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>3 Copper Earthing</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.earthingDetails || 'Standard earthing for safety'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.earthingDetails || 'Standard earthing for safety'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.earthingMake || 'True Power'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.earthingQty || '3 Unit'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Closed Wiring in PVC<br/>Conduit Pipe</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.wiringDetails || 'For safe secure wiring'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.wiringDetails || 'For safe and secure wiring'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.wiringMake || 'Approved Make'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.wiringQty || 'As per Requirement'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Cables & Accessories</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.cablesDetails || 'Cu wire 4mm'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.cablesDetails || 'Cu wire 4mm'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.cablesMake || 'Polycab'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.cablesQty || '1 Set'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Lightning Arrestor</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.lightningDetails || 'Safely grounds lighting'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.lightningDetails || 'Safely grounds lighting'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.lightningMake || 'Approved Make'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.lightningQty || '1 Set'}</td>
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>Installation & Labour</td>
-                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px', fontWeight: 'bold' }}>{quotation.installationDetails || 'Complete setup'}</td>
+                  <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.installationDetails || 'Complete setup'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.installationMake || 'EcoGrid'}</td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 6px' }}>{quotation.installationQty || 'Each'}</td>
                 </tr>
@@ -809,7 +819,7 @@ const QuotationViewPage = () => {
                 </tr>
                 <tr>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 10px', lineHeight: '1.4' }}>
-                    <b>Anti Cyclone:</b><br/>Your structures are certified for high wind speeds of upto 200 KMPH. In case there is any damage due to cyclone below this threshold, Solar Eco Grid will repair/replace for free.
+                    <b>Anti Cyclone:</b><br/>Your structures are certified for high wind speeds of upto 150 KMPH. In case there is any damage due to cyclone below this threshold, Solar Eco Grid will repair/replace for free.
                   </td>
                   <td style={{ border: '1px solid #cbd5e1', padding: '8px 10px', lineHeight: '1.4' }}>
                     Any external damage due to human intervention.
@@ -837,7 +847,7 @@ const QuotationViewPage = () => {
               <tbody style={{ fontSize: '10px', color: '#334155', fontWeight: '700' }}>
                 <tr><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px' }}>Solar Panel (production)</td><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px', color: '#3f7abe' }}>30 years</td></tr>
                 <tr><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px' }}>Solar Panel (product)</td><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px', color: '#3f7abe' }}>12 years</td></tr>
-                <tr><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px' }}>Inverter</td><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px', color: '#3f7abe' }}>7 years</td></tr>
+                <tr><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px' }}>Inverter</td><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px', color: '#3f7abe' }}>7-10 years</td></tr>
                 <tr><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px' }}>Other components</td><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px', color: '#3f7abe' }}>5 years</td></tr>
                 <tr><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px' }}>Plant performance guarantee</td><td style={{ border: '1px solid #cbd5e1', padding: '8px 10px', color: '#3f7abe' }}>Applicable</td></tr>
               </tbody>

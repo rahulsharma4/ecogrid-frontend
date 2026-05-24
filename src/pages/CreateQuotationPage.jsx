@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import SearchableSelect from '../components/UI/SearchableSelect';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
   ArrowLeft,
@@ -24,18 +24,19 @@ const calculateEmi = (principal, annualRate, tenureMonths) => {
   const p = Number(principal) || 0;
   const rate = Number(annualRate) || 0;
   const n = Number(tenureMonths) || 0;
-  
+
   if (p <= 0 || n <= 0) return '';
   if (rate <= 0) return Math.round(p / n).toString();
-  
+
   const monthlyRate = rate / 12 / 100;
   const emi = (p * monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1);
   return Math.round(emi).toString();
 };
 
 const CreateQuotationPage = () => {
-  const { user } = useAuth();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { user } = useAuth();
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -115,8 +116,78 @@ const CreateQuotationPage = () => {
     const fetchData = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/leads`, config);
-        setLeads(data);
+        const leadsRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/leads`, config);
+        setLeads(leadsRes.data);
+        
+        if (id) {
+          const quoteRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/quotations/${id}`, config);
+          const found = quoteRes.data;
+          if (found) {
+            setFormData({
+              leadId: found.lead?._id || found.lead || '',
+              systemSize: found.systemSize || '',
+              solarPanels: found.solarPanels || '',
+              solarPanelsMake: found.solarPanelsMake || 'Adani/Luminous',
+              solarPanelsQty: found.solarPanelsQty || 'As per capacity',
+              inverter: found.inverter || '',
+              inverterMake: found.inverterMake || 'Solis',
+              inverterQty: found.inverterQty || '1 Unit',
+              structureType: found.structureType || 'Pre-fabricated HDGI Elevated',
+              structureMake: found.structureMake || 'Approved Make',
+              structureQty: found.structureQty || 'For panels',
+              acdbDetails: found.acdbDetails || 'For Safe AC Distribution, IP65',
+              acdbMake: found.acdbMake || 'Polycab',
+              acdbQty: found.acdbQty || '1 Unit',
+              dcdbDetails: found.dcdbDetails || 'For Safe DC Distribution, IP65',
+              dcdbMake: found.dcdbMake || 'Polycab',
+              dcdbQty: found.dcdbQty || '1 Unit',
+              earthingDetails: found.earthingDetails || 'Standard earthing for electrical safety',
+              earthingMake: found.earthingMake || 'True Power',
+              earthingQty: found.earthingQty || '3 Unit',
+              wiringDetails: found.wiringDetails || 'For safe and secure wiring',
+              wiringMake: found.wiringMake || '',
+              wiringQty: found.wiringQty || 'As per Requirement',
+              cablesDetails: found.cablesDetails || 'Cu wire 4mm',
+              cablesMake: found.cablesMake || 'Polycab',
+              cablesQty: found.cablesQty || '1 Set',
+              lightningDetails: found.lightningDetails || 'Safely grounds lighting, protecting structure and equipment.',
+              lightningMake: found.lightningMake || 'Approved Make',
+              lightningQty: found.lightningQty || '1 Set',
+              installationDetails: found.installationDetails || 'Complete Installation & Setup',
+              installationMake: found.installationMake || '',
+              installationQty: found.installationQty || 'Each',
+              offering: found.offering || 'EcoGrid',
+              gsmBased: found.gsmBased || 'Yes',
+              cleaningFrequency: found.cleaningFrequency || 'NO',
+              floorHeight: found.floorHeight || 'G+0',
+              inverterLocation: found.inverterLocation || 'Ground',
+              inverterHybrid: found.inverterHybrid || 'No',
+              battery: found.battery || 'No',
+              batteryRemark: found.batteryRemark || '',
+              baseAmount: found.baseAmount || '',
+              earlyBirdDiscount: found.earlyBirdDiscount || '',
+              additionalDiscount: found.additionalDiscount || '',
+              gstPercentage: found.gstPercentage || 8.9,
+              includeGST: !found.isGstInclusive,
+              centralSubsidy: found.centralSubsidy || '',
+              stateSubsidy: found.stateSubsidy || '',
+              terms: found.terms || '',
+              validUntil: found.validUntil ? new Date(found.validUntil).toISOString().split('T')[0] : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              loanDetails: {
+                required: found.loanDetails?.required || false,
+                bankName: found.loanDetails?.bankName || '',
+                bankAddress: found.loanDetails?.bankAddress || '',
+                loanAmount: found.loanDetails?.loanAmount || '',
+                tenureMonths: found.loanDetails?.tenureMonths || '',
+                interestRate: found.loanDetails?.interestRate || '',
+                emiAmount: found.loanDetails?.emiAmount || '',
+                processingFees: found.loanDetails?.processingFees || '',
+                downPayment: found.loanDetails?.downPayment || '',
+                remarks: found.loanDetails?.remarks || ''
+              }
+            });
+          }
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -124,13 +195,13 @@ const CreateQuotationPage = () => {
       }
     };
     fetchData();
-  }, [user.token]);
+  }, [id, user.token]);
 
   useEffect(() => {
     const base = Number(formData.baseAmount) || 0;
     const disc = (Number(formData.earlyBirdDiscount) || 0) + (Number(formData.additionalDiscount) || 0);
     const amountAfterDisc = Math.max(0, base - disc);
-    
+
     let gst = 0;
     let net = 0;
     if (!formData.includeGST) {
@@ -206,8 +277,13 @@ const CreateQuotationPage = () => {
 
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/quotations`, submissionData, config);
-      toast.success('Proposal Launched Successfully!', { id: loadingToast });
+      if (id) {
+        await axios.put(`${import.meta.env.VITE_API_BASE_URL}/quotations/${id}`, submissionData, config);
+        toast.success('Proposal Updated Successfully!', { id: loadingToast });
+      } else {
+        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/quotations`, submissionData, config);
+        toast.success('Proposal Launched Successfully!', { id: loadingToast });
+      }
       navigate('/dashboard/quotations');
     } catch (err) {
       console.error(err);
@@ -234,8 +310,8 @@ const CreateQuotationPage = () => {
             <ArrowLeft className="w-6 h-6 group-hover:-translate-x-1 transition-transform" />
           </button>
           <div>
-            <h1 className="text-3xl font-black text-slate-950 tracking-tighter uppercase leading-none mb-1">Technical Offer</h1>
-            <p className="text-slate-500 font-bold text-sm">Configure project design & commercial terms</p>
+            <h1 className="text-3xl font-black text-slate-950 tracking-tighter uppercase leading-none mb-1">{id ? 'Edit Proposal' : 'Technical Offer'}</h1>
+            <p className="text-slate-500 font-bold text-sm">{id ? 'Update project design & commercial terms for proposal' : 'Configure project design & commercial terms'}</p>
           </div>
         </div>
       </div>
@@ -359,14 +435,14 @@ const CreateQuotationPage = () => {
               </div>
               <div className="space-y-2">
                 <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Solar Panels *</label>
-                <input type="text" required value={formData.solarPanels} onChange={e => setFormData({ ...formData, solarPanels: e.target.value })} placeholder="e.g. ZS - Adani - 620 Wp" className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-[#f6871e] transition-all" />
+                <input type="text" required value={formData.solarPanels} onChange={e => setFormData({ ...formData, solarPanels: e.target.value })} placeholder="e.g. EG - Adani - 620 Wp" className="w-full px-6 py-4.5 bg-slate-50 border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:bg-white focus:border-[#f6871e] transition-all" />
               </div>
               <div className="space-y-4 bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
                 <div className="space-y-2">
                   <label className="block text-[10px] font-black text-[#3f7abe] uppercase tracking-widest ml-1">Inverter Details *</label>
                   <input type="text" required value={formData.inverter} onChange={e => setFormData({ ...formData, inverter: e.target.value })} placeholder="e.g. Polycab - 5 kW (Single Phase)" className="w-full px-6 py-4.5 bg-white border-2 border-transparent rounded-[1.5rem] outline-none font-bold text-slate-900 focus:border-[#f6871e] transition-all" />
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="block text-[10px] font-black text-[#3f7abe] uppercase tracking-widest ml-1">Inverter Hybrid?</label>
@@ -1069,28 +1145,25 @@ const CreateQuotationPage = () => {
                 </label>
               </div>
 
-              <div className={`grid grid-cols-2 gap-6 p-6 rounded-[1.75rem] border animate-in zoom-in-95 duration-200 ${
-                formData.includeGST 
-                  ? 'bg-slate-50 border-slate-100' 
+              <div className={`grid grid-cols-2 gap-6 p-6 rounded-[1.75rem] border animate-in zoom-in-95 duration-200 ${formData.includeGST
+                  ? 'bg-slate-50 border-slate-100'
                   : 'bg-emerald-50/20 border-emerald-100/40'
-              }`}>
+                }`}>
                 <div className="space-y-2">
-                  <label className={`block text-[10px] font-black uppercase tracking-widest ml-1 ${
-                    formData.includeGST ? 'text-[#f6871e]' : 'text-emerald-600'
-                  }`}>
+                  <label className={`block text-[10px] font-black uppercase tracking-widest ml-1 ${formData.includeGST ? 'text-[#f6871e]' : 'text-emerald-600'
+                    }`}>
                     {formData.includeGST ? "GST (%) (Extra)" : "GST (%) (Included)"}
                   </label>
-                  <input 
-                    type="number" 
-                    step="0.1" 
+                  <input
+                    type="number"
+                    step="0.1"
                     disabled={!formData.includeGST}
-                    value={formData.includeGST ? formData.gstPercentage : 8.9} 
-                    onChange={e => setFormData({ ...formData, gstPercentage: e.target.value })} 
-                    className={`w-full px-4 py-3 bg-white border-2 rounded-xl outline-none font-black text-lg transition-all ${
-                      formData.includeGST 
-                        ? 'border-[#f6871e]/20 text-[#f6871e] focus:border-[#f6871e]' 
+                    value={formData.includeGST ? formData.gstPercentage : 8.9}
+                    onChange={e => setFormData({ ...formData, gstPercentage: e.target.value })}
+                    className={`w-full px-4 py-3 bg-white border-2 rounded-xl outline-none font-black text-lg transition-all ${formData.includeGST
+                        ? 'border-[#f6871e]/20 text-[#f6871e] focus:border-[#f6871e]'
                         : 'border-emerald-600/20 text-emerald-600 focus:border-emerald-600 opacity-60 cursor-not-allowed bg-slate-100'
-                    }`} 
+                      }`}
                   />
                 </div>
                 <div className="flex flex-col justify-center">
@@ -1139,7 +1212,7 @@ const CreateQuotationPage = () => {
               {isSubmitting ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                 <>
                   <Save className="w-5 h-5" />
-                  Launch Proposal
+                  {id ? 'Update Proposal' : 'Launch Proposal'}
                 </>
               )}
             </button>
