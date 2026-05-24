@@ -153,7 +153,7 @@ const QuotationViewPage = () => {
 
   const basePrice = quotation.baseAmount || 0;
   const netPrice = quotation.netPrice || 0;
-  const netEffective = quotation.netEffectivePrice || 0;
+  const netEffective = Math.max(0, netPrice - (quotation.centralSubsidy || 0) - (quotation.stateSubsidy || 0));
   const year = new Date(quotation.date || Date.now()).getFullYear();
 
   const pageStyle = {

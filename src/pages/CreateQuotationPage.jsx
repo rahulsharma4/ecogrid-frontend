@@ -212,7 +212,9 @@ const CreateQuotationPage = () => {
       gst = (amountAfterDisc * gstPercentage) / 100;
       net = amountAfterDisc + gst;
     }
-    const effective = net; // Subsidies no longer affect the final amount
+    const centralSub = Number(formData.centralSubsidy) || 0;
+    const stateSub = Number(formData.stateSubsidy) || 0;
+    const effective = Math.max(0, net - centralSub - stateSub);
 
     setCalculations({
       gstAmount: gst,
@@ -224,7 +226,9 @@ const CreateQuotationPage = () => {
     formData.earlyBirdDiscount,
     formData.additionalDiscount,
     formData.includeGST,
-    formData.gstPercentage
+    formData.gstPercentage,
+    formData.centralSubsidy,
+    formData.stateSubsidy
   ]);
 
   // Recalculate Down Payment when Net Price changes
