@@ -131,9 +131,8 @@ const QuotationViewPage = () => {
     const fetchQuotation = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/quotations`, config);
-        const found = data.find(q => q._id === id);
-        setQuotation(found);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/quotations/${id}`, config);
+        setQuotation(data);
       } catch (err) { console.error(err); } finally { setLoading(false); }
     };
     fetchQuotation();
