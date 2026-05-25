@@ -220,7 +220,7 @@ const DashboardLayout = ({ children }) => {
                 </button>
                 
                  {showNotifications && (
-                    <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden animate-in zoom-in-95 duration-200">
+                    <div className="absolute right-0 mt-3 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden animate-in zoom-in-95 duration-200">
                        <div className="p-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
                           <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Notifications</h3>
                           {unreadCount > 0 && (

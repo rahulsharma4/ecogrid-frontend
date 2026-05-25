@@ -213,8 +213,9 @@ const PaymentReceiptPage = () => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div ref={receiptRef} style={s.container} className="shadow-2xl print:shadow-none">
+      <div className="w-full overflow-x-auto pb-6" style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ minWidth: '794px', display: 'flex', justifyContent: 'center' }}>
+          <div ref={receiptRef} style={s.container} className="shadow-2xl print:shadow-none">
            {/* Header */}
            <div style={s.header}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '25px' }}>
@@ -373,10 +374,11 @@ const PaymentReceiptPage = () => {
               <p style={{ margin: '4px 0 0 0', opacity: 0.7, fontSize: '8px' }}>
                  This is a computer-generated booking receipt. | GSTIN: 09AAJCE0630Q1ZA
               </p>
-           </div>
-        </div>
+            </div>
+         </div>
       </div>
     </div>
+  </div>
   );
 };
 

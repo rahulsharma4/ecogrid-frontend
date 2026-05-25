@@ -190,7 +190,8 @@ const QuotationViewPage = () => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center' }}>
+      <div className="w-full overflow-x-auto pb-6" style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', alignItems: 'center', minWidth: '794px' }}>
         
         {/* PAGE 1: COVER PAGE */}
         <div ref={el => pagesRef.current[0] = el} style={{ ...pageStyle, background: 'linear-gradient(180deg, #3f7abe 0%, #204c82 70%, #f6871e 100%)', padding: '40px 30px', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -1119,6 +1120,7 @@ const QuotationViewPage = () => {
 
       </div>
     </div>
+  </div>
   );
 };
 

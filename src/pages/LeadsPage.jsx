@@ -632,8 +632,8 @@ const LeadsPage = () => {
 
       {/* Add/Edit Modal */}
       {(showAddForm || showEditModal) && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[110] flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-white w-full max-w-3xl rounded-[2.5rem] shadow-xl overflow-visible my-auto border border-slate-100">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[110] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-xl overflow-y-auto max-h-[90vh] my-auto border border-slate-100">
             <div className="p-8 border-b border-slate-50 flex items-center justify-between bg-[#3f7abe]/[0.01] rounded-t-[2.5rem]">
               <div>
                 <h2 className="text-2xl font-black text-slate-900">

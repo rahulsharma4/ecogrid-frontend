@@ -959,10 +959,9 @@ const ContactsPage = () => {
         </div>
       )}
 
-      {/* MODAL: Assign Telecaller (Admin) */}
       {showAssignModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-xl overflow-visible my-auto animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-md rounded-[2rem] md:rounded-[2.5rem] shadow-xl overflow-y-auto max-h-[90vh] my-auto animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-slate-100 bg-[#3f7abe]/5 rounded-t-[2.5rem] flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-black text-[#3f7abe]">Assign Tasks</h2>
@@ -1061,10 +1060,9 @@ const ContactsPage = () => {
         </div>
       )}
 
-      {/* MODAL: Manual Add Contact (Admin) */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-xl overflow-hidden my-auto animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-md rounded-[2rem] md:rounded-[2.5rem] shadow-xl overflow-y-auto max-h-[90vh] my-auto animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-slate-100 bg-[#3f7abe]/5 flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-black text-[#3f7abe]">Add Contact</h2>
@@ -1145,10 +1143,9 @@ const ContactsPage = () => {
         </div>
       )}
 
-      {/* MODAL: Bulk Upload (Admin) */}
       {showUploadModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-white w-full max-w-xl rounded-[2.5rem] shadow-xl overflow-hidden my-auto animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-xl rounded-[2rem] md:rounded-[2.5rem] shadow-xl overflow-y-auto max-h-[90vh] my-auto animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-slate-100 bg-[#3f7abe]/5 flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-black text-[#3f7abe]">Bulk Import Contacts</h2>
@@ -1285,10 +1282,9 @@ const ContactsPage = () => {
         </div>
       )}
 
-      {/* MODAL: Update Contact Status (Telecaller) */}
       {showStatusModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-xl overflow-hidden my-auto animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-md rounded-[2rem] md:rounded-[2.5rem] shadow-xl overflow-y-auto max-h-[90vh] my-auto animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-slate-100 bg-[#3f7abe]/5 flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-black text-[#3f7abe]">Update Client</h2>
@@ -1387,10 +1383,9 @@ const ContactsPage = () => {
         </div>
       )}
 
-      {/* MODAL: Convert Contact to Lead (Telecaller) */}
       {showConvertModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-white w-full max-w-3xl rounded-[2.5rem] shadow-xl overflow-visible my-auto border border-slate-100 animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white w-full max-w-3xl rounded-[2rem] md:rounded-[2.5rem] shadow-xl overflow-y-auto max-h-[90vh] my-auto border border-slate-100 animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-slate-100 bg-[#3f7abe]/5 flex items-center justify-between rounded-t-[2.5rem]">
               <div>
                 <h2 className="text-2xl font-black text-[#3f7abe]">Convert to Lead</h2>

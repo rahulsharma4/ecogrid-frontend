@@ -154,8 +154,9 @@ const FormalInvoicePage = () => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div ref={invoiceRef} style={s.container} className="shadow-2xl print:shadow-none">
+      <div className="w-full overflow-x-auto pb-6" style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ minWidth: '794px', display: 'flex', justifyContent: 'center' }}>
+          <div ref={invoiceRef} style={s.container} className="shadow-2xl print:shadow-none">
            <div style={s.header}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '25px' }}>
                  <div style={s.logoBox}>
@@ -290,6 +291,7 @@ const FormalInvoicePage = () => {
               <p style={{ margin: '0' }}>Phone: +91-9999999999 | Email: info@ecogridinfra.in | Web: www.ecogridinfra.in</p>
               <p style={{ margin: '4px 0 0 0', opacity: 0.7, fontSize: '8px' }}>This is a computer-generated tax invoice. | GSTIN: 09AAJCE0630Q1ZA</p>
            </div>
+          </div>
         </div>
       </div>
     </div>
