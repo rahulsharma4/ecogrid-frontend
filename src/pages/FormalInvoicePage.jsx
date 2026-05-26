@@ -272,20 +272,20 @@ const FormalInvoicePage = () => {
               </div>
            </div>
 
-           <div style={{ padding: '60px 40px 100px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-              <div style={{ opacity: 0.8 }}>
-                 {sealBase64 ? (
-                    <img src={sealBase64} alt="Seal" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
-                 ) : (
-                    <div style={{ width: '80px', height: '80px', border: '2px solid #3f7abe', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8px', fontWeight: '900', color: '#3f7abe', textAlign: 'center', padding: '10px' }}>ECOGRID INFRA SEAL</div>
-                 )}
-              </div>
+           <div style={{ padding: '60px 40px 100px 40px', display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
               <div style={{ textAlign: 'right' }}>
-                 <p style={{ fontSize: '11px', fontWeight: '900', color: '#3f7abe', marginBottom: '40px' }}>For ECOGRID INFRA PRIVATE LIMITED</p>
+                 <p style={{ fontSize: '11px', fontWeight: '900', color: '#3f7abe', marginBottom: '5px' }}>For ECOGRID INFRA PRIVATE LIMITED</p>
+                 <div style={{ height: '90px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '5px 0' }}>
+                    {sealBase64 ? (
+                       <img src={sealBase64} alt="Seal" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
+                    ) : (
+                       <div style={{ width: '80px', height: '80px', border: '2px solid #3f7abe', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8px', fontWeight: '900', color: '#3f7abe', textAlign: 'center', padding: '10px' }}>ECOGRID INFRA SEAL</div>
+                    )}
+                 </div>
                  <div style={{ borderTop: '1px solid #cbd5e1', width: '200px', marginLeft: 'auto' }}></div>
                  <p style={{ fontSize: '9px', color: '#64748b', marginTop: '8px', fontWeight: '800' }}>Authorized Signatory</p>
               </div>
-           </div>
+            </div>
 
            <div style={s.footer}>
               <p style={{ margin: '0' }}>Phone: +91-9999999999 | Email: info@ecogridinfra.in | Web: www.ecogridinfra.in</p>
