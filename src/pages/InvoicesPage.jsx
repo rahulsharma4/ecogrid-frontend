@@ -23,6 +23,20 @@ const statusColors = {
   'Paid': 'bg-emerald-50 text-emerald-700 border border-emerald-200',
 };
 
+const formatInvoiceNo = (no) => {
+  if (!no) return '';
+  if (no.startsWith('INV-')) {
+    const parts = no.split('-');
+    if (parts.length === 3) {
+      const seq = parseInt(parts[2], 10);
+      if (!isNaN(seq)) {
+        return `EG-${parts[1]}-${seq + 501}`;
+      }
+    }
+  }
+  return no;
+};
+
 const InvoicesPage = () => {
   const [invoices, setInvoices] = useState([]);
   const [payments, setPayments] = useState([]);
@@ -84,7 +98,7 @@ const InvoicesPage = () => {
     }
     return { ...inv, computedBalance, computedStatus };
   }).filter(inv => {
-    const matchesSearch = inv.invoiceNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = formatInvoiceNo(inv.invoiceNo).toLowerCase().includes(searchTerm.toLowerCase()) ||
                          inv.lead?.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filters.status === 'All' || inv.computedStatus === filters.status;
     
@@ -240,7 +254,7 @@ const InvoicesPage = () => {
                    )}
                 </div>
                 <div className="min-w-0">
-                   <h3 className="font-black text-slate-900 tracking-tight uppercase leading-none">{inv.invoiceNo}</h3>
+                   <h3 className="font-black text-slate-900 tracking-tight uppercase leading-none">{formatInvoiceNo(inv.invoiceNo)}</h3>
                    <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase mt-2">
                       <Calendar className="w-3.5 h-3.5 text-slate-400" />
                       {new Date(inv.createdAt || inv.date).toLocaleDateString()}

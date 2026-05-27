@@ -12,6 +12,20 @@ import html2canvas from 'html2canvas';
 import logoImg from '../assets/Logo.jpeg';
 import sealImg from '../assets/SealImg.jpeg';
 
+const formatInvoiceNo = (no) => {
+  if (!no) return '';
+  if (no.startsWith('INV-')) {
+    const parts = no.split('-');
+    if (parts.length === 3) {
+      const seq = parseInt(parts[2], 10);
+      if (!isNaN(seq)) {
+        return `EG-${parts[1]}-${seq + 501}`;
+      }
+    }
+  }
+  return no;
+};
+
 const FormalInvoicePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -53,7 +67,7 @@ const FormalInvoicePage = () => {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Tax-Invoice-${invoice?.invoiceNo || 'Document'}.pdf`);
+      pdf.save(`Tax-Invoice-${formatInvoiceNo(invoice?.invoiceNo) || 'Document'}.pdf`);
       
       const params = new URLSearchParams(location.search);
       if (params.get('download') === 'true') {
@@ -177,7 +191,7 @@ const FormalInvoicePage = () => {
            </div>
 
            <div style={s.bar}>
-              <div style={{ display: 'flex', gap: '5px' }}>INVOICE NO: <span style={{ color: '#3f7abe' }}>{invoice.invoiceNo}</span></div>
+              <div style={{ display: 'flex', gap: '5px' }}>INVOICE NO: <span style={{ color: '#3f7abe' }}>{formatInvoiceNo(invoice.invoiceNo)}</span></div>
               <div style={{ display: 'flex', gap: '5px' }}>BILL DATE: <span style={{ color: '#3f7abe' }}>{new Date(invoice.date).toLocaleDateString('en-GB')}</span></div>
               <div style={{ display: 'flex', gap: '5px' }}>STATUS: <span style={{ backgroundColor: '#dcfce7', color: '#166534', padding: '2px 8px', borderRadius: '4px' }}>{invoice.paymentStatus?.toUpperCase()}</span></div>
            </div>
@@ -238,16 +252,19 @@ const FormalInvoicePage = () => {
                         </p>
                      </div>
                      
-                     <div style={{ width: '120px', padding: '10px', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                        <p style={{ fontSize: '7px', fontWeight: '900', color: '#3f7abe', textTransform: 'uppercase', marginBottom: '5px', textAlign: 'center', letterSpacing: '0.02em' }}>Scan & Pay (UPI)</p>
+                     <div style={{ width: '150px', padding: '10px', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <p style={{ fontSize: '7.5px', fontWeight: '900', color: '#3f7abe', textTransform: 'uppercase', marginBottom: '5px', textAlign: 'center', letterSpacing: '0.02em', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                           <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/></svg>
+                           Scan & Pay
+                        </p>
                         <img 
-                           src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(
-                              `upi://pay?pa=6388908096m@pnb&pn=ECOGRID%20INFRA%20PRIVATE%20LIMITED&am=${netAmt}&cu=INR&tn=${encodeURIComponent(`Invoice ${invoice.invoiceNo || ''}`)}`
+                           src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+                              `upi://pay?pa=6388908096m@pnb&pn=ECOGRID%20INFRA%20PRIVATE%20LIMITED&am=${netAmt}&cu=INR&tn=${encodeURIComponent(`Invoice ${formatInvoiceNo(invoice.invoiceNo) || ''}`)}`
                            )}`} 
                            alt="Invoice UPI QR" 
-                           style={{ width: '70px', height: '70px' }} 
+                           style={{ width: '95px', height: '95px', display: 'block', borderRadius: '4px' }} 
                         />
-                        <p style={{ fontSize: '6px', fontWeight: '700', color: '#64748b', marginTop: '4px', textAlign: 'center' }}>6388908096m@pnb</p>
+                        <p style={{ fontSize: '7px', fontWeight: '800', color: '#64748b', marginTop: '6px', textAlign: 'center', wordBreak: 'break-all', maxWidth: '130px', lineHeight: '1.2' }}>6388908096m@pnb</p>
                      </div>
                   </div>
                </div>

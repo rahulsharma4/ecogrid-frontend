@@ -115,7 +115,6 @@ const LoginPage = () => {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                     <Lock className="w-3 h-3" /> Security Pin
                   </label>
-                  <a href="#" className="text-[10px] font-bold text-[#3f7abe] uppercase tracking-widest hover:underline">Forgot?</a>
                 </div>
                 <div className="relative group">
                   <input
