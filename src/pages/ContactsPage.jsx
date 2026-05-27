@@ -201,7 +201,7 @@ const ContactsPage = () => {
     }
   };
 
-  // Parse Excel / CSV File (Admin)
+  // Parse Excel / CSV File (Admin) - Route A: Auto Detect Columns & Merge Rest to Remarks
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -222,26 +222,51 @@ const ContactsPage = () => {
         }
 
         // Get headers and convert to lowercase
-        const headers = rawData[0].map(h => String(h).trim().toLowerCase());
-        const nameIdx = headers.indexOf('name');
-        const phoneIdx = headers.indexOf('phone');
-        const addressIdx = headers.indexOf('address');
-        const remarksIdx = headers.indexOf('remarks');
+        const headers = rawData[0].map(h => String(h || '').trim().toLowerCase());
+        
+        // Find matching columns based on common patterns
+        let nameIdx = headers.findIndex(h => h === 'name' || h.includes('name') || h === 'customer' || h.includes('customer') || h.includes('contact name') || h === 'full name');
+        let phoneIdx = headers.findIndex(h => h === 'phone' || h.includes('phone') || h === 'mobile' || h.includes('mobile') || h === 'number' || h.includes('number') || h === 'contact' || h.includes('contact') || h === 'tel');
+        let addressIdx = headers.findIndex(h => h === 'address' || h.includes('address') || h === 'addr' || h === 'location' || h.includes('location') || h === 'city' || h.includes('city') || h === 'site');
 
-        if (nameIdx === -1 || phoneIdx === -1 || addressIdx === -1) {
-          toast.error('File must contain "Name", "Phone", and "Address" columns');
+        // Fallbacks if not found by exact/partial match
+        if (nameIdx === -1) {
+          nameIdx = 0; // default to first column
+        }
+        if (phoneIdx === -1) {
+          phoneIdx = headers.length > 1 ? 1 : -1;
+        }
+        if (addressIdx === -1) {
+          addressIdx = headers.length > 2 ? 2 : -1;
+        }
+
+        // Verify Name and Phone columns are identified
+        if (nameIdx === -1 || phoneIdx === -1 || nameIdx === phoneIdx) {
+          toast.error('Could not auto-detect Name and Phone columns. Please ensure your file has columns representing Name and Phone/Mobile.');
           return;
         }
 
         const parsedRows = [];
         for (let i = 1; i < rawData.length; i++) {
           const row = rawData[i];
-          if (row.length === 0) continue;
+          if (!row || row.length === 0) continue;
 
-          const name = row[nameIdx] ? String(row[nameIdx]).trim() : '';
-          const phone = row[phoneIdx] ? String(row[phoneIdx]).trim() : '';
-          const address = row[addressIdx] ? String(row[addressIdx]).trim() : '';
-          const remarks = remarksIdx !== -1 && row[remarksIdx] ? String(row[remarksIdx]).trim() : '';
+          const name = nameIdx !== -1 && row[nameIdx] ? String(row[nameIdx]).trim() : '';
+          const phone = phoneIdx !== -1 && row[phoneIdx] ? String(row[phoneIdx]).trim() : '';
+          const address = addressIdx !== -1 && row[addressIdx] ? String(row[addressIdx]).trim() : '';
+
+          // Merge all other columns as remarks (e.g., ColumnHeader: Value)
+          const otherDetails = [];
+          headers.forEach((header, colIdx) => {
+            if (colIdx !== nameIdx && colIdx !== phoneIdx && colIdx !== addressIdx) {
+              const val = row[colIdx] !== undefined && row[colIdx] !== null ? String(row[colIdx]).trim() : '';
+              if (val && header) {
+                const prettyHeader = header.charAt(0).toUpperCase() + header.slice(1);
+                otherDetails.push(`${prettyHeader}: ${val}`);
+              }
+            }
+          });
+          const remarks = otherDetails.join(' | ');
 
           if (name && phone) {
             parsedRows.push({ name, phone, address, remarks });
@@ -1204,12 +1229,12 @@ const ContactsPage = () => {
               </div>
 
               {/* Requirement Note */}
-              <div className="flex items-start gap-3 p-4 bg-[#f6871e]/5 rounded-2xl border border-[#f6871e]/10 text-xs">
-                <AlertCircle className="w-5 h-5 text-[#f6871e] shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-4 bg-[#3f7abe]/5 rounded-2xl border border-[#3f7abe]/10 text-xs">
+                <AlertCircle className="w-5 h-5 text-[#3f7abe] shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-black text-[#f6871e] uppercase tracking-wide">File Columns requirement</p>
+                  <p className="font-black text-[#3f7abe] uppercase tracking-wide">Dynamic File Upload (Flexible Columns)</p>
                   <p className="text-slate-600 font-medium mt-1">
-                    Your file must contain the headers: <strong className="text-slate-800">Name</strong>, <strong className="text-slate-800">Phone</strong>, and <strong className="text-slate-800">Address</strong>. You can also include <strong className="text-slate-800">Remarks</strong>. Non-empty Name and Phone are required.
+                    You can upload <strong className="text-slate-800">any Excel/CSV file</strong>. The system will automatically detect the columns representing <strong className="text-slate-800">Name</strong>, <strong className="text-slate-800">Phone</strong>, and <strong className="text-slate-800">Address</strong>. All other custom columns will be combined and saved in the <strong className="text-slate-800">Remarks</strong> field.
                   </p>
                 </div>
               </div>

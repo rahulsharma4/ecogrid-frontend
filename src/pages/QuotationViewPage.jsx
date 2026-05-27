@@ -8,14 +8,9 @@ import html2canvas from 'html2canvas';
 
 // Assets
 import logoImg from '../assets/Logo.jpeg';
-import coverEngineerImg from '../assets/cover_engineer.png';
 import coverTabletImg from '../assets/cover_tablet.png';
-import structureImg from '../assets/structure_diagram.png';
-import solarRoof1 from '../assets/solar_roof_1.png';
-import solarRoof2 from '../assets/solar_roof_2.png';
-import solarRoof3 from '../assets/solar_roof_3.png';
-import solarRail from '../assets/solar_rail.png';
-import endEngineerImg from '../assets/end_engineer.png';
+import solarRoof1 from '../assets/WhatsApp Image 2026-05-27 at 3.45.22 PM.jpeg';
+import solarRoof2 from '../assets/WhatsApp Image 2026-05-27 at 3.45.23 PM.jpeg';
 
 const TopRightTriangle = () => (
   <div style={{ position: 'absolute', top: 0, right: 0, width: '300px', height: '200px', zIndex: 0 }}>
@@ -66,7 +61,7 @@ const QuotationViewPage = () => {
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      const totalPages = quotation.loanDetails?.required ? 7 : 6;
+      const totalPages = quotation.loanDetails?.required ? 8 : 7;
 
       for (let i = 0; i < totalPages; i++) {
         const page = pagesRef.current[i];
@@ -114,14 +109,9 @@ const QuotationViewPage = () => {
         setLogoBase64(logoB64);
 
         const imgs = {
-          cover: await toBase64(coverEngineerImg),
           coverTablet: await toBase64(coverTabletImg),
-          structure: await toBase64(structureImg),
           roof1: await toBase64(solarRoof1),
-          roof2: await toBase64(solarRoof2),
-          roof3: await toBase64(solarRoof3),
-          rail: await toBase64(solarRail),
-          end: await toBase64(endEngineerImg)
+          roof2: await toBase64(solarRoof2)
         };
         setImagesBase64(imgs);
       } catch (err) { console.error('Error loading assets', err); }
@@ -262,9 +252,6 @@ const QuotationViewPage = () => {
             justifyContent: 'center',
             maxHeight: '620px'
           }}>
-            <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#3f7abe', textAlign: 'center', margin: 0, letterSpacing: '0.5px' }}>
-              "GO GREEN GO SOLAR"
-            </h2>
             <div style={{ flex: 1, borderRadius: '16px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
               {imagesBase64.roof1 ? (
                 <img src={imagesBase64.roof1} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Solar Roof" />
@@ -869,19 +856,51 @@ const QuotationViewPage = () => {
           </div>
         </div>
 
-        {/* PAGE 6: CONTACT US / BACK COVER */}
-        <div ref={el => pagesRef.current[5] = el} style={{ ...pageStyle, padding: 0, justifyContent: 'space-between', display: 'flex', flexDirection: 'column' }}>
-          {/* Top Half: Solar panels photo */}
-          <div style={{ width: '100%', height: '35%', position: 'relative', overflow: 'hidden' }}>
-            {imagesBase64.roof2 ? (
-              <img src={imagesBase64.roof2} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Solar panels backdrop" />
-            ) : (
-              imagesBase64.roof1 && <img src={imagesBase64.roof1} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Solar panels backdrop" />
-            )}
+        {/* PAGE 5: STRUCTURE SHOWCASE */}
+        <div ref={el => pagesRef.current[5] = el} style={{ ...pageStyle, background: 'linear-gradient(180deg, #3f7abe 0%, #1e4575 100%)', padding: '40px 30px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <LogoHeader logo={logoBase64} />
+
+          <div style={{ textAlign: 'center', margin: '15px 0', zIndex: 10 }}>
+            <h1 style={{ fontSize: '32px', fontWeight: '900', color: '#ffffff', margin: '0 0 5px 0', letterSpacing: '0.5px' }}>Structure Detail</h1>
           </div>
 
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '24px',
+            padding: '20px',
+            boxShadow: '0 12px 30px rgba(0,0,0,0.2)',
+            zIndex: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '15px',
+            width: '90%',
+            margin: '0 auto',
+            flex: 1,
+            justifyContent: 'center',
+            maxHeight: '620px'
+          }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#3f7abe', textAlign: 'center', margin: 0, letterSpacing: '0.5px' }}>
+              ROOFTOP STRUCTURE SHOWCASE
+            </h2>
+            <div style={{ flex: 1, borderRadius: '16px', overflow: 'hidden', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {imagesBase64.roof2 && (
+                <img src={imagesBase64.roof2} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} alt="Structure Detail" />
+              )}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div style={{ textAlign: 'center', zIndex: 10, borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '15px', marginTop: '15px' }}>
+            <span style={{ fontSize: '13px', color: '#ffffff', fontWeight: '700', letterSpacing: '0.5px' }}>www.solarecogrid.com</span>
+          </div>
+        </div>
+
+        {/* PAGE 6: CONTACT US / BACK COVER */}
+        <div ref={el => pagesRef.current[6] = el} style={{ ...pageStyle, padding: '40px 30px', justifyContent: 'space-between', display: 'flex', flexDirection: 'column' }}>
+          <LogoHeader logo={logoBase64} />
+
           {/* Middle: Title cards */}
-          <div style={{ padding: '0 30px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
             <span style={{ fontSize: '11px', fontWeight: '900', color: '#64748b', letterSpacing: '2px', textTransform: 'uppercase' }}>CONTACT US</span>
             <h1 style={{ fontSize: '32px', fontWeight: '900', color: '#3f7abe', margin: 0, textAlign: 'center', letterSpacing: '0.5px', lineHeight: '1.2' }}>
               ECOGRID INFRA PVT LTD
@@ -897,146 +916,149 @@ const QuotationViewPage = () => {
             </div>
           </div>
 
-          {/* Bottom Card Block: Contact, Bank Account Details & QRs */}
+          {/* Bottom Card Block: Contact, Bank Account Details & QRs (Stacked Vertically) */}
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1.2fr 1.2fr',
-            gap: '15px',
-            margin: '0 20px 20px 20px',
-            alignItems: 'stretch'
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            margin: '0 20px 20px 20px'
           }}>
-            {/* Column 1: Orange Contact, GST Card & WhatsApp QR */}
+            {/* Row 1: Orange Contact, GST Card & WhatsApp QR */}
             <div style={{
               background: '#f6871e',
               color: 'white',
               borderRadius: '20px',
-              padding: '16px 20px',
+              padding: '16px 24px',
               boxShadow: '0 6px 20px rgba(246,135,30,0.15)',
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              gap: '15px'
+              gap: '20px'
             }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
-                {/* Phone Info */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ background: 'rgba(255,255,255,0.2)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Phone size={13} color="white" />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 20px' }}>
+                  {/* Phone Info */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.2)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Phone size={13} color="white" />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 'bold' }}>+91 9889555339</span>
+                      <span style={{ fontSize: '11px', fontWeight: 'bold' }}>+91 6388908096</span>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 'bold' }}>+91 9889555339</span>
-                    <span style={{ fontSize: '11px', fontWeight: 'bold' }}>+91 6388908096</span>
-                  </div>
-                </div>
 
-                {/* Website Info */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ background: 'rgba(255,255,255,0.2)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Globe size={13} color="white" />
+                  {/* Website Info */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.2)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Globe size={13} color="white" />
+                    </div>
+                    <span style={{ fontSize: '11px', fontWeight: 'bold' }}>www.solarecogrid.in</span>
                   </div>
-                  <span style={{ fontSize: '11px', fontWeight: 'bold' }}>www.solarecogrid.in</span>
-                </div>
 
-                {/* Email Info */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ background: 'rgba(255,255,255,0.2)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Mail size={13} color="white" />
+                  {/* Email Info */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.2)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Mail size={13} color="white" />
+                    </div>
+                    <span style={{ fontSize: '11px', fontWeight: 'bold', wordBreak: 'break-all' }}>info@ecogridinfra.in</span>
                   </div>
-                  <span style={{ fontSize: '11px', fontWeight: 'bold', wordBreak: 'break-all' }}>info@ecogridinfra.in</span>
-                </div>
 
-                {/* Address Info */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                  <div style={{ background: 'rgba(255,255,255,0.2)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '2px', flexShrink: 0 }}>
-                    <MapPin size={13} color="white" />
+                  {/* Address Info */}
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.2)', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '2px', flexShrink: 0 }}>
+                      <MapPin size={13} color="white" />
+                    </div>
+                    <span style={{ fontSize: '10px', fontWeight: 'bold', lineHeight: '1.3' }}>
+                      D-352, Vibhuti khand, Gomti Nagar Lucknow, 226010
+                    </span>
                   </div>
-                  <span style={{ fontSize: '10px', fontWeight: 'bold', lineHeight: '1.3' }}>
-                    D-352, Vibhuti khand, Gomti Nagar Lucknow, 226010
-                  </span>
                 </div>
 
                 {/* GSTIN Row */}
                 <div style={{
                   background: 'rgba(255, 255, 255, 0.15)',
                   borderRadius: '10px',
-                  padding: '6px 10px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1px',
+                  padding: '6px 12px',
+                  display: 'inline-flex',
+                  alignSelf: 'flex-start',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: '8px',
                   marginTop: '4px'
                 }}>
-                  <span style={{ fontSize: '8px', fontWeight: '900', textTransform: 'uppercase', opacity: 0.8, letterSpacing: '0.5px' }}>GSTIN</span>
+                  <span style={{ fontSize: '8px', fontWeight: '900', textTransform: 'uppercase', opacity: 0.8, letterSpacing: '0.5px' }}>GSTIN:</span>
                   <span style={{ fontSize: '11px', fontWeight: '900', letterSpacing: '0.5px' }}>09AAJCE0630Q1ZA</span>
                 </div>
               </div>
 
               {/* WhatsApp QR inside the Orange Card */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', background: 'rgba(255, 255, 255, 0.15)', padding: '10px', borderRadius: '15px', flexShrink: 0 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', background: 'rgba(255, 255, 255, 0.15)', padding: '12px 14px', borderRadius: '15px', flexShrink: 0 }}>
                 <span style={{ fontSize: '9px', fontWeight: '900', color: '#ffffff', textTransform: 'uppercase', margin: 0, letterSpacing: '0.02em', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 0 0 1.333 4.982L2 22l5.202-1.362a9.92 9.92 0 0 0 4.808 1.238h.005c5.505 0 9.99-4.478 9.99-9.986C22.007 6.478 17.519 2 12.012 2zm5.548 13.918c-.227.638-1.309 1.202-1.803 1.258-.456.052-.907.243-2.906-.554-2.559-1.02-4.179-3.593-4.307-3.76-.127-.168-1.037-1.366-1.037-2.61 0-1.244.65-1.854.882-2.102.23-.248.503-.309.671-.309.168 0 .336.002.483.008.151.006.353-.058.552.416.202.489.69 1.666.75 1.787.061.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.252.312-.359.419-.118.118-.242.247-.104.48.138.233.612.997 1.31 1.614.896.793 1.649 1.039 1.884 1.159.236.12.373.1.512-.06.139-.16.605-.698.766-.938.162-.239.324-.2.548-.118.224.08 1.42.662 1.662.782.242.12.404.18.463.28.059.1.059.578-.168 1.216z"/></svg>
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 0 0 1.333 4.982L2 22l5.202-1.362a9.92 9.92 0 0 0 4.808 1.238h.005c5.505 0 9.99-4.478 9.99-9.986C22.007 6.478 17.519 2 12.012 2zm5.548 13.918c-.227.638-1.309 1.202-1.803 1.258-.456.052-.907.243-2.906-.554-2.559-1.02-4.179-3.593-4.307-3.76-.127-.168-1.037-1.366-1.037-2.61 0-1.244.65-1.854.882-2.102.23-.248.503-.309.671-.309.168 0 .336.002.483.008.151.006.353-.058.552.416.202.489.69 1.666.75 1.787.061.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.252.312-.359.419-.118.118-.242.247-.104.48.138.233.612.997 1.31 1.614.896.793 1.649 1.039 1.884 1.159.236.12.373.1.512-.06.139-.16.605-.698.766-.938.162-.239.324-.2.548-.118.224.08 1.42.662 1.662.782.242.12.404.18.463.28.059.1.059.578-.168 1.216z"/></svg>
                   Scan to Chat
                 </span>
                 <img 
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent('https://wa.me/916388908096')}`}
                   alt="WhatsApp QR Code" 
-                  style={{ width: '85px', height: '85px', display: 'block', borderRadius: '4px', backgroundColor: '#ffffff', padding: '4px' }} 
+                  style={{ width: '115px', height: '115px', display: 'block', borderRadius: '6px', backgroundColor: '#ffffff', padding: '5px' }} 
                 />
                 <span style={{ fontSize: '8px', fontWeight: '800', color: '#ffffff' }}>+91 6388908096</span>
               </div>
             </div>
 
-            {/* Column 2: White Bank Details Card & UPI QR */}
+            {/* Row 2: White Bank Details Card & UPI QR */}
             <div style={{
               background: '#ffffff',
               borderRadius: '20px',
-              padding: '16px 20px',
+              padding: '16px 24px',
               border: '2px solid #e0ebf6',
               boxShadow: '0 6px 20px rgba(0,0,0,0.02)',
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              gap: '15px'
+              gap: '20px'
             }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
                 <p style={{ fontSize: '9px', fontWeight: '900', color: '#3f7abe', margin: '0 0 4px 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Bank Remittance</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 20px' }}>
                   <div>
                     <p style={{ margin: 0, fontSize: '8px', color: '#64748b', fontWeight: '800', textTransform: 'uppercase' }}>Account Name</p>
-                    <p style={{ margin: 0, fontSize: '10px', color: '#1e293b', fontWeight: '900', lineHeight: '1.2' }}>ECOGRID INFRA PRIVATE LIMITED</p>
+                    <p style={{ margin: 0, fontSize: '10.5px', color: '#1e293b', fontWeight: '900', lineHeight: '1.2' }}>ECOGRID INFRA PRIVATE LIMITED</p>
                   </div>
                   <div>
                     <p style={{ margin: 0, fontSize: '8px', color: '#64748b', fontWeight: '800', textTransform: 'uppercase' }}>Bank Name</p>
-                    <p style={{ margin: 0, fontSize: '10px', color: '#1e293b', fontWeight: '900' }}>Punjab National Bank</p>
+                    <p style={{ margin: 0, fontSize: '10.5px', color: '#1e293b', fontWeight: '900' }}>Punjab National Bank</p>
                   </div>
                   <div>
                     <p style={{ margin: 0, fontSize: '8px', color: '#64748b', fontWeight: '800', textTransform: 'uppercase' }}>Account Number (Current)</p>
-                    <p style={{ margin: 0, fontSize: '10.5px', color: '#3f7abe', fontWeight: '900' }}>6193002100004183</p>
+                    <p style={{ margin: 0, fontSize: '11px', color: '#3f7abe', fontWeight: '900' }}>6193002100004183</p>
                   </div>
                   <div>
                     <p style={{ margin: 0, fontSize: '8px', color: '#64748b', fontWeight: '800', textTransform: 'uppercase' }}>IFSC Code</p>
-                    <p style={{ margin: 0, fontSize: '10px', color: '#1e293b', fontWeight: '900' }}>PUNB0619300</p>
+                    <p style={{ margin: 0, fontSize: '10.5px', color: '#1e293b', fontWeight: '900' }}>PUNB0619300</p>
                   </div>
-                  <div>
+                  <div style={{ gridColumn: 'span 2' }}>
                     <p style={{ margin: 0, fontSize: '8px', color: '#64748b', fontWeight: '800', textTransform: 'uppercase' }}>Branch</p>
-                    <p style={{ margin: 0, fontSize: '8.5px', color: '#475569', fontWeight: 'bold', lineHeight: '1.2' }}>Vibhuti Khand, Gomti Nagar, Lucknow</p>
+                    <p style={{ margin: 0, fontSize: '9px', color: '#475569', fontWeight: 'bold', lineHeight: '1.2' }}>Vibhuti Khand, Gomti Nagar, Lucknow</p>
                   </div>
                 </div>
               </div>
 
               {/* UPI QR inside the White Bank Card */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px', borderRadius: '15px', flexShrink: 0 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', background: '#f8fafc', border: '1px solid #e2e8f0', padding: '12px 14px', borderRadius: '15px', flexShrink: 0 }}>
                 <span style={{ fontSize: '9px', fontWeight: '900', color: '#3f7abe', textTransform: 'uppercase', margin: 0, letterSpacing: '0.02em', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/></svg>
+                  <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/></svg>
                   Scan to Pay
                 </span>
                 <img 
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent('upi://pay?pa=6193002100004183@pnb&pn=ECOGRID%20INFRA%20PRIVATE%20LIMITED&cu=INR')}`}
                   alt="UPI Payment QR Code" 
-                  style={{ width: '85px', height: '85px', display: 'block', borderRadius: '4px', backgroundColor: '#ffffff', padding: '4px' }} 
+                  style={{ width: '115px', height: '115px', display: 'block', borderRadius: '6px', backgroundColor: '#ffffff', padding: '5px' }} 
                 />
-                <span style={{ fontSize: '8px', fontWeight: '800', color: '#64748b', textAlign: 'center', maxWidth: '100px', wordBreak: 'break-all', display: 'block', lineHeight: '1.2' }}>
+                <span style={{ fontSize: '8px', fontWeight: '800', color: '#64748b', textAlign: 'center', maxWidth: '110px', wordBreak: 'break-all', display: 'block', lineHeight: '1.2' }}>
                   6193002100004183@pnb
                 </span>
               </div>
@@ -1159,7 +1181,7 @@ const QuotationViewPage = () => {
 
         {/* PAGE 7: FINANCING (Only if required) */}
         {quotation.loanDetails?.required && (
-          <div ref={el => pagesRef.current[6] = el} style={{ ...pageStyle, padding: '45px 30px' }}>
+          <div ref={el => pagesRef.current[7] = el} style={{ ...pageStyle, padding: '45px 30px' }}>
             <TopRightTriangle />
             <BottomLeftTriangle />
             
