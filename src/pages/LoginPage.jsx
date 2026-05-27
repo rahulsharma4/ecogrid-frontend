@@ -153,14 +153,6 @@ const LoginPage = () => {
               </div>
             </form>
 
-            <div className="mt-12 text-center">
-              <p className="text-sm text-slate-400 font-medium">
-                Don't have an operator account?{' '}
-                <Link to="/register" className="text-[#f6871e] font-bold hover:underline">
-                  Request Access
-                </Link>
-              </p>
-            </div>
             
             <div className="mt-12 flex items-center justify-center gap-6 opacity-40">
                <div className="flex items-center gap-2">

@@ -285,6 +285,7 @@ const ContactsPage = () => {
       }
     };
     reader.readAsBinaryString(file);
+    e.target.value = ''; // Reset file input value
   };
 
   // Download Sample Excel Template
@@ -1192,7 +1193,7 @@ const ContactsPage = () => {
                   type="file" 
                   accept=".xlsx, .xls, .csv" 
                   onChange={handleFileChange} 
-                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" 
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" 
                 />
                 <div className="p-4 bg-white rounded-2xl shadow-sm text-slate-400 group-hover:text-[#3f7abe] group-hover:scale-110 transition-all mb-3">
                   <FileSpreadsheet className="w-8 h-8" />

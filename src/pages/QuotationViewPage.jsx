@@ -61,7 +61,7 @@ const QuotationViewPage = () => {
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      const totalPages = quotation.loanDetails?.required ? 8 : 7;
+      const totalPages = quotation.loanDetails?.required ? 7 : 6;
 
       for (let i = 0; i < totalPages; i++) {
         const page = pagesRef.current[i];
@@ -252,9 +252,9 @@ const QuotationViewPage = () => {
             justifyContent: 'center',
             maxHeight: '620px'
           }}>
-            <div style={{ flex: 1, borderRadius: '16px', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
-              {imagesBase64.roof1 ? (
-                <img src={imagesBase64.roof1} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Solar Roof" />
+            <div style={{ flex: 1, borderRadius: '16px', overflow: 'hidden', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {imagesBase64.roof2 ? (
+                <img src={imagesBase64.roof2} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} alt="Structure Detail" />
               ) : (
                 imagesBase64.structure && <img src={imagesBase64.structure} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Structure" />
               )}
@@ -856,47 +856,8 @@ const QuotationViewPage = () => {
           </div>
         </div>
 
-        {/* PAGE 5: STRUCTURE SHOWCASE */}
-        <div ref={el => pagesRef.current[5] = el} style={{ ...pageStyle, background: 'linear-gradient(180deg, #3f7abe 0%, #1e4575 100%)', padding: '40px 30px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <LogoHeader logo={logoBase64} />
-
-          <div style={{ textAlign: 'center', margin: '15px 0', zIndex: 10 }}>
-            <h1 style={{ fontSize: '32px', fontWeight: '900', color: '#ffffff', margin: '0 0 5px 0', letterSpacing: '0.5px' }}>Structure Detail</h1>
-          </div>
-
-          <div style={{
-            background: '#ffffff',
-            borderRadius: '24px',
-            padding: '20px',
-            boxShadow: '0 12px 30px rgba(0,0,0,0.2)',
-            zIndex: 10,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '15px',
-            width: '90%',
-            margin: '0 auto',
-            flex: 1,
-            justifyContent: 'center',
-            maxHeight: '620px'
-          }}>
-            <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#3f7abe', textAlign: 'center', margin: 0, letterSpacing: '0.5px' }}>
-              ROOFTOP STRUCTURE SHOWCASE
-            </h2>
-            <div style={{ flex: 1, borderRadius: '16px', overflow: 'hidden', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {imagesBase64.roof2 && (
-                <img src={imagesBase64.roof2} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} alt="Structure Detail" />
-              )}
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div style={{ textAlign: 'center', zIndex: 10, borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '15px', marginTop: '15px' }}>
-            <span style={{ fontSize: '13px', color: '#ffffff', fontWeight: '700', letterSpacing: '0.5px' }}>www.solarecogrid.com</span>
-          </div>
-        </div>
-
         {/* PAGE 6: CONTACT US / BACK COVER */}
-        <div ref={el => pagesRef.current[6] = el} style={{ ...pageStyle, padding: '40px 30px', justifyContent: 'space-between', display: 'flex', flexDirection: 'column' }}>
+        <div ref={el => pagesRef.current[5] = el} style={{ ...pageStyle, padding: '40px 30px', justifyContent: 'space-between', display: 'flex', flexDirection: 'column' }}>
           <LogoHeader logo={logoBase64} />
 
           {/* Middle: Title cards */}
@@ -1065,110 +1026,42 @@ const QuotationViewPage = () => {
             </div>
           </div>
 
-          {/* Price Estimator Table */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
-              <thead>
-                <tr style={{ borderBottom: '2px solid #cbd5e1' }}>
-                  <th style={{ textAlign: 'left', padding: '6px 4px', fontWeight: '900', color: '#3f7abe', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Price</th>
-                  <th style={{ textAlign: 'right', padding: '6px 4px', fontWeight: '900', color: '#3f7abe', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>Cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '6px 4px', fontWeight: '700', color: '#475569' }}>Rooftop System</td>
-                  <td style={{ padding: '6px 4px', textAlign: 'right', fontWeight: '700', color: '#1e293b' }}>₹ {basePrice.toLocaleString('en-IN')}</td>
-                </tr>
-                
-                {quotation.earlyBirdDiscount > 0 && (
-                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '6px 4px', color: '#64748b' }}>Early bird discount</td>
-                    <td style={{ padding: '6px 4px', textAlign: 'right', color: '#dc2626', fontWeight: 'bold' }}>- ₹ {quotation.earlyBirdDiscount.toLocaleString('en-IN')}</td>
-                  </tr>
-                )}
-
-                {quotation.additionalDiscount > 0 && (
-                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '6px 4px', color: '#64748b' }}>Discount</td>
-                    <td style={{ padding: '6px 4px', textAlign: 'right', color: '#dc2626', fontWeight: 'bold' }}>- ₹ {quotation.additionalDiscount.toLocaleString('en-IN')}</td>
-                  </tr>
-                )}
-
-                {quotation.isGstInclusive ? (
-                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '6px 4px', fontWeight: '700', color: '#475569' }}>
-                      Net Price (Inclusive of {quotation.gstPercentage || 8.9}% GST)
-                    </td>
-                    <td style={{ padding: '6px 4px', textAlign: 'right', fontWeight: '900', color: '#1e293b' }}>
-                      ₹ {netPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                    </td>
-                  </tr>
-                ) : (
-                  <>
-                    {quotation.gstPercentage > 0 && (
-                      <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                        <td style={{ padding: '6px 4px', color: '#64748b' }}>
-                          GST ({quotation.gstPercentage}% Extra)
-                        </td>
-                        <td style={{ padding: '6px 4px', textAlign: 'right', color: '#1e293b', fontWeight: 'bold' }}>
-                          + ₹ {(quotation.gstAmount || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                        </td>
-                      </tr>
-                    )}
-                    <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '6px 4px', fontWeight: '700', color: '#475569' }}>
-                        Net Price (Inclusive of all Taxes)
-                      </td>
-                      <td style={{ padding: '6px 4px', textAlign: 'right', fontWeight: '900', color: '#1e293b' }}>
-                        ₹ {netPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                      </td>
-                    </tr>
-                  </>
-                )}
-
-                {quotation.centralSubsidy > 0 && (
-                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '6px 4px', color: '#64748b' }}>Central Govt. Direct Benefit Transfer</td>
-                    <td style={{ padding: '6px 4px', textAlign: 'right', color: '#16a34a', fontWeight: 'bold' }}>- ₹ {quotation.centralSubsidy.toLocaleString('en-IN')}</td>
-                  </tr>
-                )}
-
-                {quotation.stateSubsidy > 0 && (
-                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '6px 4px', color: '#64748b' }}>UPNEEDA Subsidy</td>
-                    <td style={{ padding: '6px 4px', textAlign: 'right', color: '#16a34a', fontWeight: 'bold' }}>- ₹ {quotation.stateSubsidy.toLocaleString('en-IN')}</td>
-                  </tr>
-                )}
-
-                {/* Net Effective Price Highlight Row */}
-                <tr style={{ 
-                  background: 'linear-gradient(90deg, #f6871e 0%, #fb923c 100%)', 
-                  borderRadius: '8px', 
-                  boxShadow: '0 2px 5px rgba(246,135,30,0.2)'
-                }}>
-                  <td style={{ padding: '8px 10px', fontWeight: '900', color: '#ffffff', borderTopLeftRadius: '8px', borderBottomLeftRadius: '8px' }}>
-                    Net Effective Price*
-                  </td>
-                  <td style={{ padding: '8px 10px', textAlign: 'right', fontWeight: '900', color: '#ffffff', borderTopRightRadius: '8px', borderBottomRightRadius: '8px', fontSize: '13px' }}>
-                    ₹ {netEffective.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Note Section */}
+          {/* Address and Office Info Showcase instead of Price Table */}
           <div style={{ 
-            marginTop: '12px', 
-            fontSize: '8px', 
-            color: '#64748b', 
-            lineHeight: '1.4', 
-            borderTop: '1px solid #e2e8f0', 
-            paddingTop: '8px' 
+            flex: 1, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            gap: '15px', 
+            padding: '24px', 
+            border: '2px dashed rgba(63, 122, 190, 0.15)', 
+            borderRadius: '24px', 
+            backgroundColor: '#f8fafc',
+            marginTop: '15px'
           }}>
-            <b>Note</b><br/>
-            1. Once the commissioning is completed by MNRE, the subsidy amount will be directly transferred to the beneficiary's account.<br/>
-            2. The applicable subsidy amount is determined according to the MNRE declaration. For more details regarding the MNRE subsidy.
+            <div style={{ 
+              backgroundColor: 'rgba(63, 122, 190, 0.1)', 
+              color: '#3f7abe', 
+              padding: '12px', 
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <MapPin size={24} />
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ margin: '0 0 6px 0', fontSize: '10px', color: '#64748b', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Corporate Office</p>
+              <p style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#1e293b', fontWeight: '900', lineHeight: '1.4', letterSpacing: '-0.2px' }}>
+                ECOGRID INFRA PRIVATE LIMITED<br/>
+                D-352, Vibhuti Khand, Gomti Nagar,<br/>
+                Lucknow, Uttar Pradesh - 226010
+              </p>
+              <p style={{ margin: 0, fontSize: '11px', color: '#3f7abe', fontWeight: 'bold' }}>
+                info@ecogridinfra.in | www.solarecogrid.in
+              </p>
+            </div>
           </div>
 
           {/* Footer Website link */}
@@ -1181,7 +1074,7 @@ const QuotationViewPage = () => {
 
         {/* PAGE 7: FINANCING (Only if required) */}
         {quotation.loanDetails?.required && (
-          <div ref={el => pagesRef.current[7] = el} style={{ ...pageStyle, padding: '45px 30px' }}>
+          <div ref={el => pagesRef.current[6] = el} style={{ ...pageStyle, padding: '45px 30px' }}>
             <TopRightTriangle />
             <BottomLeftTriangle />
             

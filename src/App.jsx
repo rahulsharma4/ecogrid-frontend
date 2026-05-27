@@ -7,7 +7,7 @@ import DashboardLayout from './components/DashboardLayout';
 import ConsultantsPage from './pages/ConsultantsPage';
 import LeadsPage from './pages/LeadsPage';
 import PaymentsPage from './pages/PaymentsPage';
-import RegisterPage from './pages/RegisterPage';
+
 import DashboardStats from './pages/DashboardStats';
 import LeadHistoryPage from './pages/LeadHistoryPage';
 import QuotationsPage from './pages/QuotationsPage';
@@ -61,7 +61,7 @@ function App() {
         }} />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register" element={<Navigate to="/login" />} />
           <Route
             path="/dashboard/*"
             element={
