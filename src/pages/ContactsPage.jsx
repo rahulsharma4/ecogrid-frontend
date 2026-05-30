@@ -221,13 +221,13 @@ const ContactsPage = () => {
           return;
         }
 
-        // Get headers and convert to lowercase
-        const headers = rawData[0].map(h => String(h || '').trim().toLowerCase());
+        // Get headers and convert to lowercase (Array.from handles sparse arrays without holes)
+        const headers = Array.from(rawData[0] || []).map(h => String(h || '').trim().toLowerCase());
         
-        // Find matching columns based on common patterns
-        let nameIdx = headers.findIndex(h => h === 'name' || h.includes('name') || h === 'customer' || h.includes('customer') || h.includes('contact name') || h === 'full name');
-        let phoneIdx = headers.findIndex(h => h === 'phone' || h.includes('phone') || h === 'mobile' || h.includes('mobile') || h === 'number' || h.includes('number') || h === 'contact' || h.includes('contact') || h === 'tel');
-        let addressIdx = headers.findIndex(h => h === 'address' || h.includes('address') || h === 'addr' || h === 'location' || h.includes('location') || h === 'city' || h.includes('city') || h === 'site');
+        // Find matching columns based on common patterns (guard h against undefined/null)
+        let nameIdx = headers.findIndex(h => h && (h === 'name' || h.includes('name') || h === 'customer' || h.includes('customer') || h.includes('contact name') || h === 'full name'));
+        let phoneIdx = headers.findIndex(h => h && (h === 'phone' || h.includes('phone') || h === 'mobile' || h.includes('mobile') || h === 'number' || h.includes('number') || h === 'contact' || h.includes('contact') || h === 'tel'));
+        let addressIdx = headers.findIndex(h => h && (h === 'address' || h.includes('address') || h === 'addr' || h === 'location' || h.includes('location') || h === 'city' || h.includes('city') || h === 'site'));
 
         // Fallbacks if not found by exact/partial match
         if (nameIdx === -1) {
@@ -281,7 +281,7 @@ const ContactsPage = () => {
         }
       } catch (err) {
         console.error(err);
-        toast.error('Failed to parse file. Please verify layout.');
+        toast.error('Failed to parse file: ' + err.message);
       }
     };
     reader.readAsArrayBuffer(file);
