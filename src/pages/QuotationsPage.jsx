@@ -17,7 +17,8 @@ import {
   RotateCcw,
   ChevronLeft,
   ArrowRight,
-  Eye
+  Eye,
+  AlertCircle
 } from 'lucide-react';
 
 const statusColors = {
@@ -292,7 +293,22 @@ const QuotationsPage = () => {
                              setModalConfig({
                                isOpen: true,
                                title: 'Generate Invoice?',
-                               message: `Convert Proposal ${q.quotationNo} into a formal tax invoice?`,
+                               message: (
+                                 <div className="flex flex-col items-center gap-4 text-center">
+                                   <p className="text-slate-500 font-bold text-sm leading-relaxed px-2">
+                                     Convert Proposal <strong className="text-slate-800">{q.quotationNo}</strong> into a formal tax invoice?
+                                   </p>
+                                   <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-200 text-left w-full mt-2">
+                                     <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                                     <div>
+                                       <p className="text-xs font-black text-amber-800 uppercase tracking-wider">Important Notice</p>
+                                       <p className="text-[10px] text-amber-700 font-bold uppercase tracking-wide mt-1 leading-normal">
+                                         Once a quotation is converted into an invoice, it cannot be edited or modified.
+                                       </p>
+                                     </div>
+                                   </div>
+                                 </div>
+                               ),
                                onConfirm: async () => {
                                  const loadingToast = toast.loading('Generating Tax Invoice...');
                                  try {
