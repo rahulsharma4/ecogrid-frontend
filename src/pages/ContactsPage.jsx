@@ -210,8 +210,8 @@ const ContactsPage = () => {
     const reader = new FileReader();
     reader.onload = (evt) => {
       try {
-        const bstr = evt.target.result;
-        const wb = XLSX.read(bstr, { type: 'binary' });
+        const data = new Uint8Array(evt.target.result);
+        const wb = XLSX.read(data, { type: 'array' });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
         const rawData = XLSX.utils.sheet_to_json(ws, { header: 1 });
@@ -284,7 +284,7 @@ const ContactsPage = () => {
         toast.error('Failed to parse file. Please verify layout.');
       }
     };
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file);
     e.target.value = ''; // Reset file input value
   };
 
